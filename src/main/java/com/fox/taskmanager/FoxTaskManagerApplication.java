@@ -9,5 +9,4 @@ public class FoxTaskManagerApplication {
     public static void main(String[] args) {
         SpringApplication.run(FoxTaskManagerApplication.class, args);
     }
-
 }

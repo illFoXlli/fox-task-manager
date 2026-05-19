@@ -40,9 +40,9 @@ public class NoteService {
         Map<Long, Note> notes = noteStorage.getNotes();
 
         if (!notes.containsKey(id)) {
-            throw new NoteNotFoundException(
-                    "Note with id " + id + " not found"
-            );
+            throw new NoteNotFoundException("Note with id "
+                    + id
+                    + " not found");
         }
 
         notes.remove(id);
@@ -53,9 +53,9 @@ public class NoteService {
         Map<Long, Note> notes = noteStorage.getNotes();
 
         if (!notes.containsKey(note.getId())) {
-            throw new NoteNotFoundException(
-                    "Note with id " + note.getId() + " not found"
-            );
+            throw new NoteNotFoundException("Note with id "
+                    + note.getId()
+                    + " not found");
         }
 
         Note existingNote = notes.get(note.getId());
@@ -69,9 +69,9 @@ public class NoteService {
         Note note = noteStorage.getNotes().get(id);
 
         if (note == null) {
-            throw new NoteNotFoundException(
-                    "Note with id " + id + " not found"
-            );
+            throw new NoteNotFoundException("Note with id "
+                    + id
+                    + " not found");
         }
 
         return note;

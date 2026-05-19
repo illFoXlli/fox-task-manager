@@ -9,5 +9,4 @@ class FoxTaskManagerApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }

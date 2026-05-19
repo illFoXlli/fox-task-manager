@@ -3,7 +3,7 @@ plugins {
     id 'org.springframework.boot' version '3.5.6'
     id 'io.spring.dependency-management' version '1.1.7'
     id 'checkstyle'
-    id 'com.diffplug.spotless' version '7.2.1'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 
@@ -13,7 +13,7 @@ description = 'fox-task-manager'
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(21)
     }
 }
 
@@ -56,6 +56,8 @@ tasks.withType(Checkstyle) {
 spotless {
 
     java {
+
+        eclipse().configFile('config/formatter/eclipse-java-formatter.xml')
 
         removeUnusedImports()
 
