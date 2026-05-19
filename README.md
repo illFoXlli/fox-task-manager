@@ -4,7 +4,7 @@ Task management backend service built with Spring Boot.
 
 ## Tech Stack
 
-- Java 17
+- Java 21
 - Spring Boot
 - Gradle
 - Checkstyle
@@ -15,7 +15,6 @@ Task management backend service built with Spring Boot.
 - Note CRUD service
 - In-memory note storage
 - Custom exception handling
-- Git hooks
 - Checkstyle validation
 - Spotless formatting
 
@@ -23,12 +22,8 @@ Task management backend service built with Spring Boot.
 
 src/main/java/com/fox/taskmanager
 
-- config
-- controller
-- dto
 - exception
 - model
-- repository
 - service
 - storage
 
@@ -57,14 +52,6 @@ src/main/java/com/fox/taskmanager
 - Delete note
 - Get note by id
 - Get all notes
-
-## Environment Variables
-
-Create `.env` file in project root:
-
-```env
-APP_PORT=3999
-```
 
 ## Future Plans
 
