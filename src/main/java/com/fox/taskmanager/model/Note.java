@@ -3,9 +3,7 @@ package com.fox.taskmanager.model;
 public class Note {
 
     private Long id;
-
     private String title;
-
     private String content;
 
     public Note() {
@@ -43,7 +41,6 @@ public class Note {
 
     @Override
     public String toString() {
-
         return "Note{"
                 + "id=" + id
                 + ", title='" + title + '\''
