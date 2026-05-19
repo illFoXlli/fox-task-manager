@@ -1,7 +1,14 @@
 #!/bin/sh
 
-echo "Running Checkstyle..."
+echo "Running Spotless..."
+./gradlew spotlessApply
 
+if [ $? -ne 0 ]; then
+  echo "Spotless failed. Commit aborted."
+  exit 1
+fi
+
+echo "Running Checkstyle..."
 ./gradlew check
 
 if [ $? -ne 0 ]; then
@@ -9,4 +16,4 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-echo "Checkstyle passed."
+echo "All checks passed."
