@@ -1,0 +1,44 @@
+# gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# intellij idea
+.idea/
+*.iml
+out/
+
+# vscode
+.vscode/
+
+# environment
+.env
+.env.*
+
+# logs
+*.log
+logs/
+
+# temp
+tmp/
+temp/
+
+# databases
+*.mv.db
+*.trace.db
+*.h2.db
+
+# generated reports
+reports/
+.checkstyle/
+
+# java crash logs
+hs_err_pid*
+replay_pid*
+
+# macos
+.DS_Store
+
+# windows
+Thumbs.db
+desktop.ini

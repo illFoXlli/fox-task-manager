@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: fox-task-manager
+
+server:
+  port: ${APP_PORT:8080}
