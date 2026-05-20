@@ -6,14 +6,13 @@ import com.fox.taskmanager.storage.NoteStorage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import org.springframework.stereotype.Service;
 
 @Service
 public class InMemoryNoteService implements NoteService {
 
     private final NoteStorage noteStorage;
-    private final Random random = new Random();
+    private long nextId = 1L;
 
     public InMemoryNoteService(NoteStorage noteStorage) {
         this.noteStorage = noteStorage;
@@ -68,10 +67,6 @@ public class InMemoryNoteService implements NoteService {
     }
 
     private long generateId() {
-        long id;
-        do {
-            id = random.nextLong(1_000_000);
-        } while (noteStorage.getNotes().containsKey(id));
-        return id;
+        return nextId++;
     }
 }
