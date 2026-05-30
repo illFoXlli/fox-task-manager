@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class InMemoryNoteService implements NoteService {
 
     private final NoteStorage noteStorage;
-    private long nextId = 1L;
+    private long nextId = 4L;
 
     public InMemoryNoteService(NoteStorage noteStorage) {
         this.noteStorage = noteStorage;
