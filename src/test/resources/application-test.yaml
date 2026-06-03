@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: ${DB_URL_TEST}
+    username: ${DB_TEST_USER}
+    password: ${DB_TEST_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+
+  flyway:
+    enabled: ${FLYWAY_ENABLED:true}
+
+server:
+  port: 0

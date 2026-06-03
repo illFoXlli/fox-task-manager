@@ -6,4 +6,19 @@ services:
       - .env
     volumes:
       - ./docker/db-init/init-db.sh:/init-db.sh:ro
+    tmpfs:
+      - /var/lib/postgresql/data
     entrypoint: ["bash", "/init-db.sh"]
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: fox-task-manager
+    env_file:
+      - .env
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    depends_on:
+      db-init:
+        condition: service_completed_successfully
