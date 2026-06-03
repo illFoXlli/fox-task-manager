@@ -1,0 +1,9 @@
+services:
+  db-init:
+    image: postgres:16
+    container_name: fox-task-manager-db-init
+    env_file:
+      - .env
+    volumes:
+      - ./docker/db-init/init-db.sh:/init-db.sh:ro
+    entrypoint: ["bash", "/init-db.sh"]
