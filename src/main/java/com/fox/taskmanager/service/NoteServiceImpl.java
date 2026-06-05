@@ -7,11 +7,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DatabaseNoteService implements NoteService {
+public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
 
-    public DatabaseNoteService(NoteRepository noteRepository) {
+    public NoteServiceImpl(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
     }
 
