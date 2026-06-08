@@ -17,3 +17,15 @@ spring:
 
 server:
   port: ${APP_PORT:8080}
+
+app:
+  jwt:
+    secret: ${JWT_SECRET}
+    access-expiration-minutes: ${JWT_ACCESS_EXPIRATION_MINUTES:15}
+    refresh-expiration-days: ${JWT_REFRESH_EXPIRATION_DAYS:30}
+
+  admin:
+    login: ${ADMIN_LOGIN}
+    password: ${ADMIN_PASSWORD}
+    display-name: ${ADMIN_DISPLAY_NAME:Admin}
+    email: ${ADMIN_EMAIL:}

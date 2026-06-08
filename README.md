@@ -13,3 +13,5 @@ Task management backend service built with Spring Boot.
 
 ```bash
 ./gradlew bootRun
+
+ ./gradlew spotlessApply   
