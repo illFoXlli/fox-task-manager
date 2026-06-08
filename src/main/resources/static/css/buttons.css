@@ -1,0 +1,67 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 54px;
+    padding: 0 22px;
+    border: 1px solid #0d6670;
+    border-radius: 7px;
+    font-family: var(--font-display);
+    font-weight: 900;
+    color: #101010;
+    gap: 10px;
+    transition:
+            transform 0.15s ease,
+            box-shadow 0.15s ease,
+            background 0.15s ease;
+}
+
+.button:hover {
+    transform: translateY(-1px);
+}
+
+.button:active {
+    transform: translateY(2px);
+    box-shadow: none;
+}
+
+.button--full {
+    width: 100%;
+}
+
+.button--primary {
+    background: linear-gradient(180deg, #098b92, #08727b);
+    color: #ffffff;
+    box-shadow: 0 12px 22px rgba(4, 79, 88, 0.22);
+}
+
+.button--primary:hover {
+    background: linear-gradient(180deg, #0a9aa2, #08727b);
+}
+
+.button--telegram {
+    background: rgba(255, 255, 255, 0.72);
+    border-color: rgba(7, 94, 105, 0.62);
+    box-shadow: none;
+    color: #075e69;
+}
+
+.button--telegram:hover {
+    background: #ffffff;
+    border-color: var(--color-telegram);
+    color: #075e69;
+}
+
+.button__icon {
+    margin-right: 8px;
+    font-size: 20px;
+}
+
+.button__telegram-icon {
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    border-radius: 50%;
+    background: url("/images/auth/telegram-logo.svg") center / 24px 24px no-repeat;
+    box-shadow: 0 4px 10px rgba(29, 155, 215, 0.22);
+}

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Нотатки | Fox Task Manager</title>
+    <title>Перегляд нотаток | Fox Task Manager</title>
 
     <link rel="icon" type="image/png" href="/images/auth/favicon.png">
     <link rel="stylesheet" href="/styles.css?v=1">
@@ -30,36 +30,27 @@
     <section class="notes-hero">
         <div>
             <p class="notes-hero__label">
-                Кабінет відкрито
-            </p>
-
-            <h1 class="notes-hero__title">
-                Список нотаток
-            </h1>
-
-            <p class="notes-hero__text">
-                Тут живуть твої записи. Поки без зайвої магії, але вже з порядком.
+                Режим перегляду
             </p>
         </div>
 
-        <a class="notes-hero__button" th:href="@{/note/view}">
-            Перегляд
+        <a class="notes-hero__button" th:href="@{/note/list}">
+            Назад до списку
         </a>
     </section>
 
-    <section class="notes-board" aria-label="Список нотаток">
+    <section class="notes-board" aria-label="Перегляд нотаток">
         <div th:if="${#lists.isEmpty(notes)}" class="notes-empty">
             Нотаток поки немає.
         </div>
 
         <div th:if="${!#lists.isEmpty(notes)}" class="notes-table-wrap">
-            <table class="notes-table">
+            <table class="notes-table notes-table--readonly">
                 <thead>
                 <tr>
                     <th scope="col">ID</th>
                     <th scope="col">Заголовок</th>
                     <th scope="col">Текст</th>
-                    <th scope="col">Дії</th>
                 </tr>
                 </thead>
 
@@ -72,21 +63,6 @@
                     <td data-label="Заголовок" class="notes-title" th:text="${note.title}"></td>
 
                     <td data-label="Текст" class="notes-content" th:text="${note.content}"></td>
-
-                    <td data-label="Дії">
-                        <div class="notes-actions">
-                            <a class="notes-action notes-action--edit" th:href="@{/note/edit(id=${note.id})}">
-                                Edit
-                            </a>
-
-                            <form th:action="@{/note/delete}" method="post">
-                                <input type="hidden" name="id" th:value="${note.id}">
-                                <button class="notes-action notes-action--delete" type="submit">
-                                    Delete
-                                </button>
-                            </form>
-                        </div>
-                    </td>
                 </tr>
                 </tbody>
             </table>

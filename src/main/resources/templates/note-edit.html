@@ -2,70 +2,96 @@
 <html lang="uk" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit note</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: #f6f8fb;
-        }
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редагування нотатки | Fox Task Manager</title>
 
-        .page-card {
-            border-radius: 18px;
-        }
-    </style>
+    <link rel="icon" type="image/png" href="/images/auth/favicon.png">
+    <link rel="stylesheet" href="/styles.css?v=1">
 </head>
 
-<body>
-<main class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-9 col-lg-7">
-            <div class="mb-4">
-                <span class="badge text-bg-success mb-2">
-                    Edit note
-                </span>
+<body class="app-page">
+<header class="app-header">
+    <a class="app-brand" th:href="@{/note/list}" aria-label="Fox Task Manager">
+        <span class="app-brand__mark" aria-hidden="true"></span>
+    </a>
 
-                <h1 class="fw-bold mb-1">
-                    Редагування нотатки
-                </h1>
+    <nav class="app-nav" aria-label="Основна навігація">
+        <a class="app-nav__link app-nav__link--active" th:href="@{/note/list}">
+            Нотатки
+        </a>
+    </nav>
 
-                <p class="text-muted mb-0">
-                    Зміни заголовок або текст нотатки та збережи результат.
+    <a class="app-header__action" th:href="@{/login}">
+        Вийти
+    </a>
+</header>
+
+<main class="notes-shell notes-shell--edit">
+    <section class="notes-hero notes-hero--edit">
+        <div>
+            <p class="notes-hero__label">
+                Редагування
+            </p>
+
+            <h1 class="notes-hero__title">
+                Оновити нотатку
+            </h1>
+
+            <p class="notes-hero__text">
+                Зміни заголовок або текст, а потім збережи результат.
+            </p>
+        </div>
+    </section>
+
+    <section class="notes-board notes-edit-board" aria-label="Форма редагування нотатки">
+        <form class="notes-edit-form" th:action="@{/note/edit}" th:object="${note}" method="post">
+            <input type="hidden" th:field="*{id}">
+
+            <div class="form-group">
+                <label class="form-label" for="title">
+                    Заголовок
+                </label>
+
+                <input
+                        id="title"
+                        class="form-control"
+                        type="text"
+                        th:field="*{title}"
+                >
+
+                <p class="form-message">
+                    Коротка назва допоможе швидше знайти запис.
                 </p>
             </div>
 
-            <div class="card page-card shadow-sm border-0">
-                <div class="card-body p-4">
-                    <form th:action="@{/note/edit}" th:object="${note}" method="post">
-                        <input type="hidden" th:field="*{id}">
+            <div class="form-group">
+                <label class="form-label" for="content">
+                    Текст
+                </label>
 
-                        <div class="mb-3">
-                            <label for="title" class="form-label fw-semibold">
-                                Title
-                            </label>
-                            <input id="title" type="text" th:field="*{title}" class="form-control">
-                        </div>
+                <textarea
+                        id="content"
+                        class="form-control notes-edit-form__textarea"
+                        th:field="*{content}"
+                        rows="8"
+                ></textarea>
 
-                        <div class="mb-4">
-                            <label for="content" class="form-label fw-semibold">
-                                Content
-                            </label>
-                            <textarea id="content" th:field="*{content}" rows="7" class="form-control"></textarea>
-                        </div>
-
-                        <div class="d-flex justify-content-between gap-3">
-                            <a th:href="@{/note/list}" class="btn btn-outline-secondary">
-                                Back to list
-                            </a>
-
-                            <button type="submit" class="btn btn-success">
-                                Save changes
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                <p class="form-message">
+                    Можна залишити стільки деталей, скільки потрібно.
+                </p>
             </div>
-        </div>
-    </div>
+
+            <div class="notes-edit-form__actions">
+                <a class="notes-hero__button" th:href="@{/note/list}">
+                    Назад до списку
+                </a>
+
+                <button class="button button--primary" type="submit">
+                    Зберегти зміни
+                </button>
+            </div>
+        </form>
+    </section>
 </main>
 </body>
 </html>

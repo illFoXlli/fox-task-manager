@@ -1,0 +1,32 @@
+:root {
+    --color-space: #111827;
+    --color-space-deep: #07111f;
+    --color-card: #fff8e8;
+    --color-card-border: #111827;
+
+    --color-text: #151515;
+    --color-muted: #5f6b7a;
+
+    --color-primary: #18c9b7;
+    --color-primary-dark: #0f9f92;
+
+    --color-telegram: #4aa3df;
+    --color-telegram-dark: #2f8ccd;
+
+    --color-error-bg: #ffe1e1;
+    --color-error-text: #9b1c1c;
+    --color-error-border: #e45b5b;
+
+    --color-success: #22a06b;
+    --color-warning: #ffd43b;
+
+    --shadow-card: 10px 10px 0 #000000;
+    --shadow-button: 0 5px 0 rgba(0, 0, 0, 0.28);
+
+    --radius-card: 28px;
+    --radius-input: 14px;
+    --radius-button: 999px;
+
+    --font-main: "Trebuchet MS", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-display: "Trebuchet MS", "Segoe UI", system-ui, -apple-system, sans-serif;
+}

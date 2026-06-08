@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Реєстрація | Fox Task Manager</title>
+
+    <link rel="icon" type="image/png" href="/images/auth/favicon.png">
+    <link rel="stylesheet" href="/styles.css?v=1">
+</head>
+
+<body class="auth-page auth-page--register">
+<main class="auth-shell">
+    <section class="auth-preview auth-preview--register" aria-label="Фон сторінки реєстрації">
+        <div class="auth-preview__shade"></div>
+
+        <div class="auth-preview__content">
+            <p class="auth-preview__label">Новий профіль</p>
+
+            <h1 class="auth-preview__title">
+                Створи доступ до свого простору
+            </h1>
+        </div>
+    </section>
+
+    <section class="auth-access" aria-label="Форма реєстрації">
+        <div class="auth-panel">
+            <a class="auth-back-link" th:href="@{/login}">
+                Назад до входу
+            </a>
+
+            <div class="auth-header">
+                <p class="auth-header__label">
+                    Реєстрація
+                </p>
+
+                <h2 class="auth-header__title">
+                    Створити акаунт
+                </h2>
+
+                <p class="auth-header__description">
+                    Good news, everyone. New user detected.
+                </p>
+            </div>
+
+            <div id="registerAlert" class="auth-alert auth-alert--hidden" role="alert">
+                Користувач з таким логіном вже існує
+            </div>
+
+            <form id="registerForm" class="auth-form" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="login">
+                        Логін
+                    </label>
+
+                    <input
+                            id="login"
+                            class="form-control"
+                            type="text"
+                            name="login"
+                            autocomplete="username"
+                            placeholder="наприклад fox або fox@mail.com"
+                            data-min-length="3"
+                            required
+                    >
+
+                    <p class="form-message">
+                        Логін має містити мінімум 3 символи.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">
+                        Пароль
+                    </label>
+
+                    <div class="password-field">
+                        <input
+                                id="password"
+                                class="form-control password-field__input"
+                                type="password"
+                                name="password"
+                                autocomplete="new-password"
+                                placeholder="мінімум 6 символів"
+                                data-min-length="6"
+                                required
+                        >
+
+                        <button
+                                class="password-field__button"
+                                type="button"
+                                data-password-toggle="password"
+                                aria-label="Показати пароль"
+                        >
+                            show
+                        </button>
+                    </div>
+
+                    <p class="form-message">
+                        Пароль має містити мінімум 6 символів.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="confirmPassword">
+                        Повторіть пароль
+                    </label>
+
+                    <div class="password-field">
+                        <input
+                                id="confirmPassword"
+                                class="form-control password-field__input"
+                                type="password"
+                                name="confirmPassword"
+                                autocomplete="new-password"
+                                placeholder="повтори пароль"
+                                data-min-length="6"
+                                required
+                        >
+
+                        <button
+                                class="password-field__button"
+                                type="button"
+                                data-password-toggle="confirmPassword"
+                                aria-label="Показати пароль"
+                        >
+                            show
+                        </button>
+                    </div>
+
+                    <p class="form-message">
+                        Паролі мають збігатися.
+                    </p>
+                </div>
+
+                <button class="button button--primary button--full" type="submit">
+                    Зареєструватися
+                </button>
+            </form>
+
+            <div class="auth-divider">
+                <span>або</span>
+            </div>
+
+            <button id="telegramRegisterButton" class="button button--telegram button--full" type="button">
+                <span class="button__telegram-icon" aria-hidden="true"></span>
+                Зареєструватися через Telegram
+            </button>
+
+            <p id="telegramMessage" class="auth-note auth-note--hidden">
+                Реєстрація через Telegram скоро буде доступна.
+            </p>
+        </div>
+    </section>
+</main>
+
+<footer class="auth-footer" aria-label="Нижня панель">
+    <span>🤖 Слава роботам! Смерть усім людям!</span>
+    <span>© 2026</span>
+</footer>
+
+<script src="/app.js?v=1" type="module" defer></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вхід | Fox Task Manager</title>
+
+    <link rel="icon" type="image/png" href="/images/auth/favicon.png">
+    <link rel="stylesheet" href="/styles.css?v=1">
+</head>
+
+<body class="auth-page auth-page--login">
+<main class="auth-shell">
+    <section class="auth-preview" aria-label="Попередній перегляд кабінету">
+        <div class="auth-preview__shade"></div>
+
+        <div class="auth-preview__content">
+            <p class="auth-preview__label">Майже в кабінеті</p>
+
+            <h1 class="auth-preview__title">
+                Доступ відкриється після входу
+            </h1>
+        </div>
+    </section>
+
+    <section class="auth-access" aria-label="Форма входу">
+        <div class="auth-panel">
+            <div class="auth-header">
+                <p class="auth-header__label">
+                    Авторизація
+                </p>
+
+                <h2 class="auth-header__title">
+                    Вхід у кабінет
+                </h2>
+
+                <p class="auth-header__description">
+                    Bite my shiny access token.
+                </p>
+            </div>
+
+            <div id="loginAlert" class="auth-alert auth-alert--hidden" role="alert">
+                Неправильний логін або пароль
+            </div>
+
+            <form id="loginForm" class="auth-form" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="login">
+                        Логін або email
+                    </label>
+
+                    <input
+                            id="login"
+                            class="form-control"
+                            type="text"
+                            name="login"
+                            autocomplete="username"
+                            placeholder="наприклад fox або fox@mail.com"
+                            data-min-length="3"
+                            required
+                    >
+
+                    <p class="form-message">
+                        Введи мінімум 3 символи.
+                    </p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">
+                        Пароль
+                    </label>
+
+                    <div class="password-field">
+                        <input
+                                id="password"
+                                class="form-control password-field__input"
+                                type="password"
+                                name="password"
+                                autocomplete="current-password"
+                                placeholder="твій секретний пароль"
+                                data-min-length="6"
+                                required
+                        >
+
+                        <button
+                                class="password-field__button"
+                                type="button"
+                                data-password-toggle="password"
+                                aria-label="Показати пароль"
+                        >
+                            show
+                        </button>
+                    </div>
+
+                    <p class="form-message">
+                        Пароль має містити мінімум 6 символів.
+                    </p>
+                </div>
+
+            </form>
+
+            <div class="auth-form__links">
+                <a class="auth-link" href="#">
+                    Відновити пароль
+                </a>
+
+                <a class="auth-link" th:href="@{/register}">
+                    Реєстрація
+                </a>
+            </div>
+
+            <button class="button button--primary button--full" type="submit" form="loginForm">
+                Увійти
+            </button>
+
+            <div class="auth-divider">
+                <span>або</span>
+            </div>
+
+            <button id="telegramLoginButton" class="button button--telegram button--full" type="button">
+                <span class="button__telegram-icon" aria-hidden="true"></span>
+                Увійти через Telegram
+            </button>
+
+            <p id="telegramMessage" class="auth-note auth-note--hidden">
+                Вхід через Telegram скоро буде доступний.
+            </p>
+        </div>
+    </section>
+</main>
+
+<footer class="auth-footer" aria-label="Нижня панель">
+    <span>🤖 Слава роботам! Смерть усім людям!</span>
+    <span>© 2026</span>
+</footer>
+
+<script src="/app.js?v=1" type="module" defer></script>
+</body>
+</html>

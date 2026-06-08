@@ -23,6 +23,12 @@ public class NoteController {
         return "note-list";
     }
 
+    @GetMapping("/note/view")
+    public String viewNotes(Model model) {
+        model.addAttribute("notes", noteService.listAll());
+        return "note-view";
+    }
+
     @PostMapping("/note/delete")
     public String deleteNote(@RequestParam long id) {
         noteService.deleteById(id);
