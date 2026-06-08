@@ -1,6 +1,7 @@
 package com.fox.taskmanager.initializer;
 
 import com.fox.taskmanager.config.AdminProperties;
+import com.fox.taskmanager.config.AppConstants;
 import com.fox.taskmanager.model.AuthProvider;
 import com.fox.taskmanager.model.UserProfile;
 import com.fox.taskmanager.model.UserRole;
@@ -45,7 +46,7 @@ public class AdminUserInitializer implements CommandLineRunner {
         admin.setPasswordHash(passwordEncoder.encode(adminProperties.getPassword()));
         admin.setRole(UserRole.ADMIN);
         admin.setAuthProvider(AuthProvider.WEB);
-        admin.setLanguageCode("uk");
+        admin.setLanguageCode(AppConstants.Auth.DEFAULT_LANGUAGE_CODE);
         admin.setEnabled(true);
         admin.setAccountLocked(false);
         admin.setOnline(false);

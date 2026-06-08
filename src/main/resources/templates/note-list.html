@@ -11,17 +11,25 @@
 
 <body class="app-page">
 <header class="app-header">
-    <a class="app-brand" th:href="@{/note/list}" aria-label="Fox Task Manager">
+    <a class="app-brand" th:href="@{/note/view}" aria-label="Fox Task Manager">
         <span class="app-brand__mark" aria-hidden="true"></span>
     </a>
 
     <nav class="app-nav" aria-label="Основна навігація">
-        <a class="app-nav__link app-nav__link--active" th:href="@{/note/list}">
+        <a class="app-nav__link" th:href="@{/note/view}">
             Нотатки
+        </a>
+
+        <a class="app-nav__link app-nav__link--active" th:href="@{/note/list}">
+            Керування
+        </a>
+
+        <a class="app-nav__link" th:href="@{/note/create}">
+            Створити
         </a>
     </nav>
 
-    <a class="app-header__action" th:href="@{/login}">
+    <a href="/login" class="app-header__action" data-logout-button>
         Вийти
     </a>
 </header>
@@ -42,9 +50,15 @@
             </p>
         </div>
 
-        <a class="notes-hero__button" th:href="@{/note/view}">
-            Перегляд
-        </a>
+        <div class="notes-hero__actions">
+            <a class="notes-hero__button" th:href="@{/note/create}">
+                Створити нотатку
+            </a>
+
+            <a class="notes-hero__button" th:href="@{/note/view}">
+                Перегляд
+            </a>
+        </div>
     </section>
 
     <section class="notes-board" aria-label="Список нотаток">
@@ -53,27 +67,78 @@
         </div>
 
         <div th:if="${!#lists.isEmpty(notes)}" class="notes-table-wrap">
-            <table class="notes-table">
+            <table
+                    class="notes-table"
+                    data-sort-table
+                    data-sort-storage-key="notes:list"
+                    data-default-sort-key="updatedAt"
+                    data-default-sort-direction="desc"
+            >
                 <thead>
                 <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">Заголовок</th>
-                    <th scope="col">Текст</th>
-                    <th scope="col">Дії</th>
+                    <th scope="col">
+                        <button class="notes-sort-button" type="button" data-sort-key="title">
+                            Заголовок
+                        </button>
+                    </th>
+                    <th scope="col">
+                        <button class="notes-sort-button" type="button" data-sort-key="content">
+                            Текст
+                        </button>
+                    </th>
+                    <th scope="col">
+                        <button class="notes-sort-button" type="button" data-sort-key="createdAt">
+                            Створено
+                        </button>
+                    </th>
+                    <th scope="col">
+                        <button class="notes-sort-button" type="button" data-sort-key="updatedAt">
+                            Змінено
+                        </button>
+                    </th>
+                    <th scope="col" aria-label="Дії"></th>
                 </tr>
                 </thead>
 
                 <tbody>
                 <tr th:each="note : ${notes}">
-                    <td data-label="ID">
-                        <span class="notes-id" th:text="${note.id}"></span>
-                    </td>
+                    <td
+                            data-label="Заголовок"
+                            data-sort-key="title"
+                            class="notes-title"
+                            th:attr="data-sort-value=${note.title}"
+                            th:text="${note.title}"
+                    ></td>
 
-                    <td data-label="Заголовок" class="notes-title" th:text="${note.title}"></td>
+                    <td
+                            data-label="Текст"
+                            data-sort-key="content"
+                            class="notes-content"
+                            th:attr="data-sort-value=${note.content}"
+                            th:text="${note.content}"
+                    ></td>
 
-                    <td data-label="Текст" class="notes-content" th:text="${note.content}"></td>
+                    <td
+                            data-label="Створено"
+                            data-sort-key="createdAt"
+                            class="notes-date notes-local-time"
+                            th:attr="
+                                    data-sort-value=${note.createdAtUtc},
+                                    data-utc=${note.createdAtUtc}"
+                            th:text="${#temporals.format(note.createdAt, 'dd.MM.yyyy HH:mm') + ' UTC'}"
+                    ></td>
 
-                    <td data-label="Дії">
+                    <td
+                            data-label="Змінено"
+                            data-sort-key="updatedAt"
+                            class="notes-date notes-local-time"
+                            th:attr="
+                                    data-sort-value=${note.updatedAtUtc},
+                                    data-utc=${note.updatedAtUtc}"
+                            th:text="${#temporals.format(note.updatedAt, 'dd.MM.yyyy HH:mm') + ' UTC'}"
+                    ></td>
+
+                    <td class="notes-actions-cell" aria-label="Дії">
                         <div class="notes-actions">
                             <a class="notes-action notes-action--edit" th:href="@{/note/edit(id=${note.id})}">
                                 Edit
@@ -93,5 +158,7 @@
         </div>
     </section>
 </main>
+
+<script type="module" th:src="@{/app.js?v=1}"></script>
 </body>
 </html>

@@ -24,6 +24,9 @@ app:
     access-expiration-minutes: ${JWT_ACCESS_EXPIRATION_MINUTES:15}
     refresh-expiration-days: ${JWT_REFRESH_EXPIRATION_DAYS:30}
 
+  cookie:
+    secure: ${COOKIE_SECURE:false}
+
   admin:
     login: ${ADMIN_LOGIN}
     password: ${ADMIN_PASSWORD}

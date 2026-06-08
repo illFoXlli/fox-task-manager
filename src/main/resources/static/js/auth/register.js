@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hideAuthAlert(alertElement);
     });
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const isLoginValid = validateMinLength(loginInput);
@@ -52,10 +52,35 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        showAuthAlert(
-            alertElement,
-            'API реєстрації ще не підключено. Наступним етапом додамо backend-логіку.'
-        );
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    login: loginInput.value,
+                    email: null,
+                    password: passwordInput.value,
+                    confirmPassword: confirmPasswordInput.value
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                showAuthAlert(alertElement, data.message || 'Помилка реєстрації.');
+                return;
+            }
+
+            window.location.assign(data.redirectUrl || '/note/list');
+        } catch (error) {
+            showAuthAlert(
+                alertElement,
+                'Сервіс тимчасово недоступний. Спробуйте пізніше.'
+            );
+        }
     });
 
     if (telegramButton && telegramMessage) {

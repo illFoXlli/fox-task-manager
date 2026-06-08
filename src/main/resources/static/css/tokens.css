@@ -1,0 +1,160 @@
+:root {
+    --page-min-height: 100svh;
+
+    --layout-container-width: 1180px;
+    --layout-edit-width: 820px;
+    --layout-panel-width: 510px;
+    --layout-page-gutter: 36px;
+    --layout-page-gutter-mobile: 24px;
+
+    --auth-panel-min-width: 440px;
+    --auth-panel-max-width: 560px;
+    --auth-shell-offset: 54px;
+    --auth-preview-dome-width: 620px;
+    --auth-preview-dome-height: 240px;
+    --auth-panel-skyline-height: 128px;
+    --auth-panel-skyline-height-compact: 96px;
+    --auth-panel-skyline-height-mobile: 104px;
+    --auth-panel-skyline-height-mobile-compact: 88px;
+    --auth-footer-height: 54px;
+    --auth-access-x-space: 54px;
+    --auth-access-y-space: 18px;
+    --auth-access-bottom-space: 106px;
+    --auth-register-access-y-space: 14px;
+    --auth-register-access-bottom-space: 86px;
+    --auth-preview-height-tablet: 340px;
+    --auth-preview-height-mobile: 220px;
+    --auth-access-bottom-mobile: 112px;
+    --auth-brand-name-width-mobile: 190px;
+    --auth-register-button-height: 50px;
+    --auth-register-title-mobile-small: 31px;
+    --auth-preview-content-left-min: 22px;
+    --auth-preview-content-left-max: 76px;
+    --auth-preview-content-bottom-min: 28px;
+    --auth-preview-content-bottom-max: 84px;
+    --auth-preview-text-width: 520px;
+    --auth-title-min: 42px;
+    --auth-title-max: 76px;
+    --auth-header-title-min: 38px;
+    --auth-header-title-max: 60px;
+    --auth-register-title-min: 34px;
+    --auth-register-title-max: 48px;
+
+    --header-height: 72px;
+    --brand-mark-size: 42px;
+    --auth-brand-mark-size: 38px;
+    --telegram-icon-size: 24px;
+    --notes-hero-title-min: 40px;
+    --notes-hero-title-max: 72px;
+    --notes-hero-text-width: 620px;
+
+    --control-height-xs: 32px;
+    --control-height-sm: 38px;
+    --control-height-md: 42px;
+    --control-height-lg: 54px;
+    --control-height-compact: 48px;
+    --password-toggle-width: 48px;
+    --password-input-padding: 68px;
+    --note-form-input-height: 52px;
+
+    --radius-xs: 6px;
+    --radius-sm: 7px;
+    --radius-md: 10px;
+    --radius-lg: 12px;
+    --radius-brand: 14px;
+    --radius-board: 8px;
+    --radius-pill: 999px;
+
+    --border-width: 1px;
+    --border-width-strong: 2px;
+    --focus-ring-width: 3px;
+    --focus-ring-offset: 4px;
+    --focus-ring-offset-tight: 3px;
+    --focus-ring-shadow-size: 4px;
+
+    --font-size-xs: 12px;
+    --font-size-sm: 13px;
+    --font-size-base: 14px;
+    --font-size-md: 15px;
+    --font-size-lg: 17px;
+    --font-size-xl: 18px;
+
+    --font-weight-medium: 700;
+    --font-weight-bold: 800;
+    --font-weight-heavy: 900;
+    --font-weight-display: 1000;
+
+    --line-height-tight: 1;
+    --line-height-compact: 1.28;
+    --line-height-base: 1.35;
+    --line-height-reading: 1.45;
+    --line-height-form: 1.5;
+
+    --space-xxs: 2px;
+    --space-xs: 4px;
+    --space-sm: 6px;
+    --space-md: 8px;
+    --space-lg: 10px;
+    --space-xl: 12px;
+    --space-2xl: 14px;
+    --space-3xl: 16px;
+    --space-4xl: 18px;
+    --space-5xl: 20px;
+    --space-6xl: 22px;
+    --space-7xl: 24px;
+    --space-8xl: 28px;
+    --space-9xl: 34px;
+    --space-form-label-gap: 9px;
+
+    --breakpoint-auth-stack: 1080px;
+    --breakpoint-auth-mobile: 720px;
+    --breakpoint-auth-compact: 460px;
+    --breakpoint-notes-mobile: 780px;
+    --breakpoint-notes-compact: 520px;
+
+    --duration-fast: 0.15s;
+    --duration-base: 0.18s;
+    --duration-field: 0.2s;
+    --ease-standard: ease;
+    --transition-fast: var(--duration-fast) var(--ease-standard);
+    --transition-base: var(--duration-base) var(--ease-standard);
+    --transition-field: var(--duration-field) var(--ease-standard);
+
+    --lift-small: -1px;
+    --lift-medium: -2px;
+    --press-small: 1px;
+    --press-medium: 2px;
+    --scale-press: 0.98;
+    --scale-hover: 1.02;
+
+    --shadow-brand: 0 10px 26px rgba(0, 0, 0, 0.25);
+    --shadow-auth-brand: 0 8px 24px rgba(0, 0, 0, 0.22);
+    --shadow-board: 0 24px 70px rgba(0, 0, 0, 0.22);
+    --shadow-control: 0 8px 18px rgba(4, 79, 88, 0.10);
+    --shadow-control-hover: 0 14px 26px rgba(4, 79, 88, 0.18);
+    --shadow-control-active: 0 5px 12px rgba(4, 79, 88, 0.14);
+    --shadow-primary: 0 12px 22px rgba(4, 79, 88, 0.22);
+    --shadow-primary-hover: 0 17px 30px rgba(4, 79, 88, 0.28);
+    --shadow-primary-active: 0 6px 12px rgba(4, 79, 88, 0.18);
+    --shadow-input-inner: inset 0 1px 3px rgba(9, 31, 47, 0.08);
+    --shadow-telegram-icon: 0 4px 10px rgba(29, 155, 215, 0.22);
+    --shadow-focus: 0 0 0 var(--focus-ring-shadow-size) rgba(24, 201, 183, 0.14);
+    --shadow-edit-hover: 0 14px 26px rgba(4, 79, 88, 0.24);
+    --shadow-delete-hover: 0 14px 24px rgba(154, 36, 36, 0.14);
+    --shadow-text-hero: 0 4px 24px rgba(0, 0, 0, 0.42);
+
+    --table-title-width: 24%;
+    --table-content-width: 560px;
+    --table-content-width-readonly: 760px;
+    --table-date-width: 130px;
+    --table-action-width: 82px;
+    --table-row-hover-border: 4px;
+    --sort-arrow-width: 5px;
+    --sort-arrow-height: 6px;
+
+    --textarea-min-height: 220px;
+    --notes-skyline-height: 90px;
+    --notes-form-skyline-height: 116px;
+    --notes-meta-width: 220px;
+    --auth-divider-y-space: 30px;
+}

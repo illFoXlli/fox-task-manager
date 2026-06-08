@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Створити нотатку | Fox Task Manager</title>
+
+    <link rel="icon" type="image/png" href="/images/auth/favicon.png">
+    <link rel="stylesheet" href="/styles.css?v=1">
+</head>
+
+<body class="app-page">
+<header class="app-header">
+    <a class="app-brand" th:href="@{/note/view}" aria-label="Fox Task Manager">
+        <span class="app-brand__mark" aria-hidden="true"></span>
+    </a>
+
+    <nav class="app-nav" aria-label="Основна навігація">
+        <a class="app-nav__link" th:href="@{/note/view}">
+            Нотатки
+        </a>
+
+        <a class="app-nav__link" th:href="@{/note/list}">
+            Керування
+        </a>
+
+        <a class="app-nav__link app-nav__link--active" th:href="@{/note/create}">
+            Створити
+        </a>
+    </nav>
+
+    <a href="/login" class="app-header__action" data-logout-button>
+        Вийти
+    </a>
+</header>
+
+<main class="notes-shell">
+    <section class="notes-hero">
+        <div>
+            <p class="notes-hero__label">
+                Нова нотатка
+            </p>
+
+            <h1 class="notes-hero__title">
+                Створити нотатку
+            </h1>
+
+            <p class="notes-hero__text">
+                Додай заголовок і текст. Нотатка буде збережена тільки для твого акаунта.
+            </p>
+        </div>
+
+        <a class="notes-hero__button" th:href="@{/note/list}">
+            Назад до списку
+        </a>
+    </section>
+
+    <section class="notes-board notes-form-board" aria-label="Форма створення нотатки">
+        <form class="note-form" th:action="@{/note/create}" th:object="${note}" method="post">
+            <div class="note-form__group">
+                <label class="note-form__label" for="title">
+                    Заголовок
+                </label>
+
+                <input
+                        id="title"
+                        class="note-form__input"
+                        type="text"
+                        th:field="*{title}"
+                        placeholder="Наприклад: План на день"
+                        required
+                >
+            </div>
+
+            <div class="note-form__group">
+                <label class="note-form__label" for="content">
+                    Текст
+                </label>
+
+                <textarea
+                        id="content"
+                        class="note-form__textarea"
+                        th:field="*{content}"
+                        placeholder="Напиши текст нотатки..."
+                        required
+                ></textarea>
+            </div>
+
+            <div class="note-form__actions">
+                <button class="notes-action notes-action--edit" type="submit">
+                    Створити
+                </button>
+
+                <a class="notes-action" th:href="@{/note/list}">
+                    Скасувати
+                </a>
+            </div>
+        </form>
+    </section>
+</main>
+
+<script type="module" th:src="@{/app.js?v=1}"></script>
+</body>
+</html>

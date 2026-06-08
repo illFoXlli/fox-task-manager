@@ -1,10 +1,14 @@
 package com.fox.taskmanager.model;
 
+import com.fox.taskmanager.support.AppTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -30,6 +34,10 @@ public class Note {
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_profile_id", nullable = false)
+    private UserProfile userProfile;
+
     public Note() {
     }
 
@@ -41,7 +49,7 @@ public class Note {
 
     @PrePersist
     void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = AppTime.nowUtc();
 
         createdAt = now;
         updatedAt = now;
@@ -49,7 +57,7 @@ public class Note {
 
     @PreUpdate
     void preUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedAt = AppTime.nowUtc();
     }
 
     public Long getId() {
@@ -80,8 +88,24 @@ public class Note {
         return createdAt;
     }
 
+    public String getCreatedAtUtc() {
+        return AppTime.toUtcString(createdAt);
+    }
+
     public LocalDateTime getUpdatedAt() {
         return updatedAt;
+    }
+
+    public String getUpdatedAtUtc() {
+        return AppTime.toUtcString(updatedAt);
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 
     @Override

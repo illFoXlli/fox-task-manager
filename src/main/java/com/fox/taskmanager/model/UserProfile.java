@@ -1,5 +1,7 @@
 package com.fox.taskmanager.model;
 
+import com.fox.taskmanager.config.AppConstants;
+import com.fox.taskmanager.support.AppTime;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -93,13 +95,13 @@ public class UserProfile {
 
     @PrePersist
     void prePersist() {
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = AppTime.nowUtc();
 
         createdAt = now;
         updatedAt = now;
 
         if (languageCode == null) {
-            languageCode = "uk";
+            languageCode = AppConstants.Auth.DEFAULT_LANGUAGE_CODE;
         }
 
         if (role == null) {
@@ -115,7 +117,7 @@ public class UserProfile {
 
     @PreUpdate
     void preUpdate() {
-        updatedAt = LocalDateTime.now();
+        updatedAt = AppTime.nowUtc();
     }
 
     public Long getId() {

@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         hideAuthAlert(alertElement);
     });
 
-    form.addEventListener('submit', (event) => {
+    form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const isLoginValid = validateMinLength(loginInput);
@@ -39,7 +39,36 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        window.location.assign('/note/list');
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    login: loginInput.value,
+                    password: passwordInput.value
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                showAuthAlert(
+                    alertElement,
+                    data.message || 'Неправильний логін або пароль.'
+                );
+                return;
+            }
+
+            window.location.assign(data.redirectUrl || '/note/list');
+        } catch (error) {
+            showAuthAlert(
+                alertElement,
+                'Сервіс тимчасово недоступний. Спробуйте пізніше.'
+            );
+        }
     });
 
     if (telegramButton && telegramMessage) {

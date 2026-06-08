@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редагування нотатки | Fox Task Manager</title>
+    <title>Редагувати нотатку | Fox Task Manager</title>
 
     <link rel="icon" type="image/png" href="/images/auth/favicon.png">
     <link rel="stylesheet" href="/styles.css?v=1">
@@ -11,17 +11,25 @@
 
 <body class="app-page">
 <header class="app-header">
-    <a class="app-brand" th:href="@{/note/list}" aria-label="Fox Task Manager">
+    <a class="app-brand" th:href="@{/note/view}" aria-label="Fox Task Manager">
         <span class="app-brand__mark" aria-hidden="true"></span>
     </a>
 
     <nav class="app-nav" aria-label="Основна навігація">
-        <a class="app-nav__link app-nav__link--active" th:href="@{/note/list}">
+        <a class="app-nav__link" th:href="@{/note/view}">
             Нотатки
+        </a>
+
+        <a class="app-nav__link app-nav__link--active" th:href="@{/note/list}">
+            Керування
+        </a>
+
+        <a class="app-nav__link" th:href="@{/note/create}">
+            Створити
         </a>
     </nav>
 
-    <a class="app-header__action" th:href="@{/login}">
+    <a href="/login" class="app-header__action" data-logout-button>
         Вийти
     </a>
 </header>
@@ -41,57 +49,85 @@
                 Зміни заголовок або текст, а потім збережи результат.
             </p>
         </div>
+
+        <a class="notes-hero__button" th:href="@{/note/list}">
+            Назад до списку
+        </a>
     </section>
 
-    <section class="notes-board notes-edit-board" aria-label="Форма редагування нотатки">
-        <form class="notes-edit-form" th:action="@{/note/edit}" th:object="${note}" method="post">
+    <section
+            class="notes-board notes-form-board notes-edit-board"
+            aria-label="Форма редагування нотатки"
+    >
+        <dl class="note-detail__meta note-detail__meta--edit">
+            <div>
+                <dt>Створено</dt>
+                <dd
+                        class="notes-local-time"
+                        th:attr="data-utc=${createdAtUtc}"
+                        th:text="${#temporals.format(createdAt, 'dd.MM.yyyy HH:mm') + ' UTC'}"
+                >
+                    08.06.2026 12:00
+                </dd>
+            </div>
+
+            <div>
+                <dt>Змінено</dt>
+                <dd
+                        class="notes-local-time"
+                        th:attr="data-utc=${updatedAtUtc}"
+                        th:text="${#temporals.format(updatedAt, 'dd.MM.yyyy HH:mm') + ' UTC'}"
+                >
+                    08.06.2026 12:00
+                </dd>
+            </div>
+        </dl>
+
+        <form class="note-form" th:action="@{/note/edit}" th:object="${note}" method="post">
             <input type="hidden" th:field="*{id}">
 
-            <div class="form-group">
-                <label class="form-label" for="title">
+            <div class="note-form__group">
+                <label class="note-form__label" for="title">
                     Заголовок
                 </label>
 
                 <input
                         id="title"
-                        class="form-control"
+                        class="note-form__input"
                         type="text"
                         th:field="*{title}"
+                        placeholder="Наприклад: План на день"
+                        required
                 >
-
-                <p class="form-message">
-                    Коротка назва допоможе швидше знайти запис.
-                </p>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="content">
+            <div class="note-form__group">
+                <label class="note-form__label" for="content">
                     Текст
                 </label>
 
                 <textarea
                         id="content"
-                        class="form-control notes-edit-form__textarea"
+                        class="note-form__textarea"
                         th:field="*{content}"
-                        rows="8"
+                        placeholder="Напиши текст нотатки..."
+                        required
                 ></textarea>
-
-                <p class="form-message">
-                    Можна залишити стільки деталей, скільки потрібно.
-                </p>
             </div>
 
-            <div class="notes-edit-form__actions">
-                <a class="notes-hero__button" th:href="@{/note/list}">
-                    Назад до списку
+            <div class="note-form__actions">
+                <a class="notes-action" th:href="@{/note/list}">
+                    Скасувати
                 </a>
 
-                <button class="button button--primary" type="submit">
-                    Зберегти зміни
+                <button class="notes-action notes-action--edit" type="submit">
+                    Зберегти
                 </button>
             </div>
         </form>
     </section>
 </main>
+
+<script type="module" th:src="@{/app.js?v=1}"></script>
 </body>
 </html>

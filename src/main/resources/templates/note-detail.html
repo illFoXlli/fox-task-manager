@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${note.title} + ' | Перегляд нотатки'">Перегляд нотатки</title>
+
+    <link rel="icon" type="image/png" href="/images/auth/favicon.png">
+    <link rel="stylesheet" href="/styles.css?v=1">
+</head>
+
+<body class="app-page">
+<header class="app-header">
+    <a class="app-brand" th:href="@{/note/view}" aria-label="Fox Task Manager">
+        <span class="app-brand__mark" aria-hidden="true"></span>
+    </a>
+
+    <nav class="app-nav" aria-label="Основна навігація">
+        <a class="app-nav__link app-nav__link--active" th:href="@{/note/view}">
+            Нотатки
+        </a>
+
+        <a class="app-nav__link" th:href="@{/note/list}">
+            Керування
+        </a>
+
+        <a class="app-nav__link" th:href="@{/note/create}">
+            Створити
+        </a>
+    </nav>
+
+    <a href="/login" class="app-header__action" data-logout-button>
+        Вийти
+    </a>
+</header>
+
+<main class="notes-shell notes-shell--detail">
+    <section class="notes-hero notes-hero--detail">
+        <div>
+            <p class="notes-hero__label">
+                Перегляд
+            </p>
+
+            <h1 class="notes-hero__title">
+                Нотатка відкрита
+            </h1>
+        </div>
+
+        <a class="notes-hero__button" th:href="@{/note/view}">
+            Назад до перегляду
+        </a>
+    </section>
+
+    <section class="notes-board notes-form-board notes-detail-board" aria-label="Перегляд нотатки">
+        <article class="note-detail">
+            <header class="note-detail__header">
+                <div>
+                    <p class="note-detail__label">
+                        Заголовок
+                    </p>
+
+                    <h2 class="note-detail__title" th:text="${note.title}">
+                        Назва нотатки
+                    </h2>
+                </div>
+
+                <dl class="note-detail__meta">
+                    <div>
+                        <dt>Створено</dt>
+                        <dd
+                                class="notes-local-time"
+                                th:attr="data-utc=${note.createdAtUtc}"
+                                th:text="${#temporals.format(note.createdAt, 'dd.MM.yyyy HH:mm') + ' UTC'}"
+                        >
+                            08.06.2026 12:00
+                        </dd>
+                    </div>
+
+                    <div>
+                        <dt>Змінено</dt>
+                        <dd
+                                class="notes-local-time"
+                                th:attr="data-utc=${note.updatedAtUtc}"
+                                th:text="${#temporals.format(note.updatedAt, 'dd.MM.yyyy HH:mm') + ' UTC'}"
+                        >
+                            08.06.2026 12:00
+                        </dd>
+                    </div>
+                </dl>
+            </header>
+
+            <div class="note-detail__content" th:text="${note.content}">
+                Текст нотатки
+            </div>
+
+            <div class="note-form__actions">
+                <a class="notes-action" th:href="@{/note/view}">
+                    Назад
+                </a>
+
+                <a class="notes-action notes-action--edit" th:href="@{/note/edit(id=${note.id})}">
+                    Редагувати
+                </a>
+            </div>
+        </article>
+    </section>
+</main>
+
+<script type="module" th:src="@{/app.js?v=1}"></script>
+</body>
+</html>

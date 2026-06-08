@@ -2,26 +2,26 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 54px;
-    padding: 0 22px;
-    border: 1px solid #0d6670;
-    border-radius: 7px;
+    min-height: var(--control-height-lg);
+    padding: 0 var(--space-6xl);
+    border: var(--border-width) solid #0d6670;
+    border-radius: var(--radius-sm);
     font-family: var(--font-display);
-    font-weight: 900;
+    font-weight: var(--font-weight-heavy);
     color: #101010;
-    gap: 10px;
+    gap: var(--space-lg);
     transition:
-            transform 0.15s ease,
-            box-shadow 0.15s ease,
-            background 0.15s ease;
+            transform var(--transition-fast),
+            box-shadow var(--transition-fast),
+            background var(--transition-fast);
 }
 
 .button:hover {
-    transform: translateY(-1px);
+    transform: translateY(var(--lift-small));
 }
 
 .button:active {
-    transform: translateY(2px);
+    transform: translateY(var(--press-medium));
     box-shadow: none;
 }
 
@@ -32,7 +32,7 @@
 .button--primary {
     background: linear-gradient(180deg, #098b92, #08727b);
     color: #ffffff;
-    box-shadow: 0 12px 22px rgba(4, 79, 88, 0.22);
+    box-shadow: var(--shadow-primary);
 }
 
 .button--primary:hover {
@@ -53,15 +53,15 @@
 }
 
 .button__icon {
-    margin-right: 8px;
-    font-size: 20px;
+    margin-right: var(--space-md);
+    font-size: var(--space-5xl);
 }
 
 .button__telegram-icon {
-    width: 24px;
-    height: 24px;
-    flex: 0 0 24px;
+    width: var(--telegram-icon-size);
+    height: var(--telegram-icon-size);
+    flex: 0 0 var(--telegram-icon-size);
     border-radius: 50%;
-    background: url("/images/auth/telegram-logo.svg") center / 24px 24px no-repeat;
-    box-shadow: 0 4px 10px rgba(29, 155, 215, 0.22);
+    background: url("/images/auth/telegram-logo.svg") center / var(--telegram-icon-size) var(--telegram-icon-size) no-repeat;
+    box-shadow: var(--shadow-telegram-icon);
 }
