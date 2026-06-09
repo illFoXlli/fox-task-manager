@@ -10,9 +10,9 @@
     min-height: var(--header-height);
     padding: 0 clamp(var(--space-4xl), 4vw, 58px);
     display: grid;
-    grid-template-columns: auto 1fr auto;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    gap: var(--space-8xl);
+    gap: clamp(var(--space-5xl), 2.4vw, var(--space-8xl));
     background: rgba(5, 25, 39, 0.88);
     color: #ffffff;
 }
@@ -110,6 +110,37 @@
 .app-nav__link:active,
 .app-header__action:active {
     transform: translateY(var(--press-small));
+}
+
+.app-header__tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: clamp(var(--space-3xl), 2vw, var(--space-6xl));
+    min-width: 0;
+}
+
+.app-clock {
+    width: min(var(--app-clock-width), 32vw);
+    min-width: 230px;
+    padding: var(--space-sm) var(--space-3xl);
+    border: var(--border-width) solid rgba(24, 201, 183, 0.26);
+    border-radius: var(--radius-pill);
+    background:
+            linear-gradient(180deg, rgba(24, 201, 183, 0.12), rgba(255, 216, 77, 0.05)),
+            rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 18px rgba(24, 201, 183, 0.10);
+    color: #aefaf0;
+    font-family: var(--font-display);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-heavy);
+    letter-spacing: 0.02em;
+    line-height: var(--line-height-compact);
+    overflow: hidden;
+    text-align: center;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .notes-shell {
@@ -627,11 +658,37 @@
 @media (max-width: 780px) {
     .app-header {
         grid-template-columns: auto 1fr auto;
+        grid-auto-rows: min-content;
+        padding-top: var(--space-lg);
+        padding-bottom: var(--space-lg);
+    }
+
+    .app-brand {
+        grid-column: 1;
+        grid-row: 1;
+    }
+
+    .app-header__tools {
+        display: contents;
+    }
+
+    .app-header__action {
+        grid-column: 3;
+        grid-row: 1;
+        justify-self: end;
+    }
+
+    .app-clock {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-self: center;
+        width: min(var(--app-clock-mobile-width), calc(100vw - var(--layout-page-gutter-mobile) * 2));
+        min-width: 0;
     }
 
     .app-nav {
-        grid-column: auto;
-        order: initial;
+        grid-column: 1 / -1;
+        grid-row: 3;
         padding-bottom: 0;
     }
 
@@ -708,6 +765,11 @@
     .app-nav {
         justify-content: center;
         gap: 14px;
+    }
+
+    .app-clock {
+        font-size: var(--font-size-xs);
+        letter-spacing: 0.02em;
     }
 
     .notes-shell {

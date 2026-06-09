@@ -84,6 +84,12 @@ public class UserProfile {
     @Column(name = "telegram_last_login_at")
     private LocalDateTime telegramLastLoginAt;
 
+    @Column(name = "last_device_id", length = 64)
+    private String lastDeviceId;
+
+    @Column(name = "last_ip_address", length = 100)
+    private String lastIpAddress;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
@@ -286,6 +292,22 @@ public class UserProfile {
 
     public void setTelegramLastLoginAt(LocalDateTime telegramLastLoginAt) {
         this.telegramLastLoginAt = telegramLastLoginAt;
+    }
+
+    public String getLastDeviceId() {
+        return lastDeviceId;
+    }
+
+    public void setLastDeviceId(String lastDeviceId) {
+        this.lastDeviceId = lastDeviceId;
+    }
+
+    public String getLastIpAddress() {
+        return lastIpAddress;
+    }
+
+    public void setLastIpAddress(String lastIpAddress) {
+        this.lastIpAddress = lastIpAddress;
     }
 
     public LocalDateTime getCreatedAt() {

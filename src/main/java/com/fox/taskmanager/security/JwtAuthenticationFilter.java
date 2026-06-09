@@ -2,6 +2,7 @@ package com.fox.taskmanager.security;
 
 import com.fox.taskmanager.model.UserProfile;
 import com.fox.taskmanager.repository.UserProfileRepository;
+import com.fox.taskmanager.service.RefreshTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -18,13 +19,19 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final CookieService cookieService;
     private final JwtTokenService jwtTokenService;
+    private final RefreshTokenService refreshTokenService;
     private final UserProfileRepository userProfileRepository;
 
     public JwtAuthenticationFilter(
+            CookieService cookieService,
             JwtTokenService jwtTokenService,
+            RefreshTokenService refreshTokenService,
             UserProfileRepository userProfileRepository) {
+        this.cookieService = cookieService;
         this.jwtTokenService = jwtTokenService;
+        this.refreshTokenService = refreshTokenService;
         this.userProfileRepository = userProfileRepository;
     }
 
@@ -35,7 +42,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             FilterChain filterChain) throws ServletException, IOException {
         String token = extractCookie(request, CookieService.ACCESS_TOKEN_COOKIE);
 
-        if (token == null || !jwtTokenService.isTokenValid(token)) {
+        if (token == null || !jwtTokenService.isAccessTokenValid(token)) {
+            restoreAccessFromRefreshToken(request, response);
             filterChain.doFilter(request, response);
             return;
         }
@@ -48,6 +56,40 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .ifPresent(this::authenticate);
 
         filterChain.doFilter(request, response);
+    }
+
+    private void restoreAccessFromRefreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        String refreshToken = extractCookie(request, CookieService.REFRESH_TOKEN_COOKIE);
+
+        if (refreshToken == null) {
+            return;
+        }
+
+        if (!jwtTokenService.isRefreshTokenValid(refreshToken)) {
+            cookieService.clearAuthCookies(response);
+            return;
+        }
+
+        try {
+            refreshTokenService.getValidRefreshToken(refreshToken);
+        } catch (IllegalArgumentException exception) {
+            cookieService.clearAuthCookies(response);
+            return;
+        }
+
+        String login = jwtTokenService.extractLogin(refreshToken);
+
+        userProfileRepository.findByLogin(login)
+                .filter(UserProfile::isEnabled)
+                .filter(userProfile -> !userProfile.isAccountLocked())
+                .ifPresent(userProfile -> {
+                    String accessToken = jwtTokenService.createAccessToken(userProfile);
+
+                    cookieService.addAccessTokenCookie(response, accessToken);
+                    authenticate(userProfile);
+                });
     }
 
     private void authenticate(UserProfile userProfile) {

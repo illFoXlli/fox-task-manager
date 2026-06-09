@@ -11,4 +11,8 @@ public interface JwtTokenService {
     String extractLogin(String token);
 
     boolean isTokenValid(String token);
+
+    boolean isAccessTokenValid(String token);
+
+    boolean isRefreshTokenValid(String token);
 }

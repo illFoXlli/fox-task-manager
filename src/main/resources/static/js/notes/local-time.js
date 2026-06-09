@@ -19,7 +19,8 @@ function formatLocalTime(value) {
 
     return new Intl.DateTimeFormat(navigator.language || 'uk-UA', {
         dateStyle: 'short',
-        timeStyle: 'short'
+        timeStyle: 'short',
+        timeZoneName: 'short'
     }).format(date);
 }
 
@@ -28,6 +29,7 @@ function initLocalTime(element) {
 
     if (formattedTime) {
         element.textContent = formattedTime;
+        element.title = `${element.dataset.utc} UTC`;
     }
 }
 

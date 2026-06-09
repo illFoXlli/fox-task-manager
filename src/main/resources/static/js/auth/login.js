@@ -3,18 +3,21 @@ import {
     normalizeLogin,
     showAuthAlert,
     validateMinLength
-} from './form-validation.js?v=1';
+} from './form-validation.js?v=7';
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('loginForm');
     const loginInput = document.getElementById('login');
     const passwordInput = document.getElementById('password');
     const alertElement = document.getElementById('loginAlert');
-    const telegramButton = document.getElementById('telegramLoginButton');
-    const telegramMessage = document.getElementById('telegramMessage');
-
     if (!form || !loginInput || !passwordInput) {
         return;
+    }
+
+    const queryParams = new URLSearchParams(window.location.search);
+
+    if (queryParams.has('telegramError')) {
+        showAuthAlert(alertElement, 'Telegram не підтвердив вхід. Спробуйте ще раз.');
     }
 
     loginInput.addEventListener('input', () => {
@@ -62,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
 
-            window.location.assign(data.redirectUrl || '/note/list');
+            window.location.assign(data.redirectUrl || '/note/view');
         } catch (error) {
             showAuthAlert(
                 alertElement,
@@ -71,9 +74,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    if (telegramButton && telegramMessage) {
-        telegramButton.addEventListener('click', () => {
-            telegramMessage.classList.toggle('auth-note--hidden');
+    const updateTelegramStartLink = (link) => {
+        const url = new URL(link.href);
+
+        url.searchParams.set('origin', window.location.origin);
+        link.href = url.toString();
+    };
+
+    document.querySelectorAll('[data-telegram-start-link]').forEach((link) => {
+        updateTelegramStartLink(link);
+
+        link.addEventListener('click', () => {
+            updateTelegramStartLink(link);
         });
-    }
+    });
 });

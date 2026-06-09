@@ -4,7 +4,7 @@ import {
     showAuthAlert,
     validateMinLength,
     validatePasswordMatch
-} from './form-validation.js?v=1';
+} from './form-validation.js?v=7';
 
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('registerForm');
@@ -12,9 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordInput = document.getElementById('password');
     const confirmPasswordInput = document.getElementById('confirmPassword');
     const alertElement = document.getElementById('registerAlert');
-    const telegramButton = document.getElementById('telegramRegisterButton');
-    const telegramMessage = document.getElementById('telegramMessage');
-
     if (!form || !loginInput || !passwordInput || !confirmPasswordInput) {
         return;
     }
@@ -83,9 +80,18 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    if (telegramButton && telegramMessage) {
-        telegramButton.addEventListener('click', () => {
-            telegramMessage.classList.toggle('auth-note--hidden');
+    const updateTelegramStartLink = (link) => {
+        const url = new URL(link.href);
+
+        url.searchParams.set('origin', window.location.origin);
+        link.href = url.toString();
+    };
+
+    document.querySelectorAll('[data-telegram-start-link]').forEach((link) => {
+        updateTelegramStartLink(link);
+
+        link.addEventListener('click', () => {
+            updateTelegramStartLink(link);
         });
-    }
+    });
 });

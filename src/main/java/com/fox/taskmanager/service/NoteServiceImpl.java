@@ -2,6 +2,7 @@ package com.fox.taskmanager.service;
 
 import com.fox.taskmanager.config.AppConstants;
 import com.fox.taskmanager.dto.note.NoteCreateRequest;
+import com.fox.taskmanager.dto.note.NoteResponse;
 import com.fox.taskmanager.dto.note.NoteUpdateRequest;
 import com.fox.taskmanager.exception.NoteNotFoundException;
 import com.fox.taskmanager.model.Note;
@@ -25,12 +26,15 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
-    public List<Note> listAll(String login) {
-        return noteRepository.findAllByUserProfileLoginOrderByUpdatedAtDesc(login);
+    public List<NoteResponse> listAll(String login) {
+        return noteRepository.findAllByUserProfileLoginOrderByUpdatedAtDesc(login)
+                .stream()
+                .map(NoteResponse::from)
+                .toList();
     }
 
     @Override
-    public Note add(NoteCreateRequest request, String login) {
+    public NoteResponse add(NoteCreateRequest request, String login) {
         UserProfile userProfile = getUserProfile(login);
         Note note = new Note();
 
@@ -38,28 +42,32 @@ public class NoteServiceImpl implements NoteService {
         note.setContent(cleanText(request.getContent()));
         note.setUserProfile(userProfile);
 
-        return noteRepository.save(note);
+        return NoteResponse.from(noteRepository.save(note));
     }
 
     @Override
     public void deleteById(Long id, String login) {
-        Note note = getById(id, login);
+        Note note = getOwnedNote(id, login);
 
         noteRepository.delete(note);
     }
 
     @Override
-    public void update(NoteUpdateRequest request, String login) {
-        Note existingNote = getById(request.getId(), login);
+    public NoteResponse update(NoteUpdateRequest request, String login) {
+        Note existingNote = getOwnedNote(request.getId(), login);
 
         existingNote.setTitle(cleanText(request.getTitle()));
         existingNote.setContent(cleanText(request.getContent()));
 
-        noteRepository.save(existingNote);
+        return NoteResponse.from(noteRepository.save(existingNote));
     }
 
     @Override
-    public Note getById(Long id, String login) {
+    public NoteResponse getById(Long id, String login) {
+        return NoteResponse.from(getOwnedNote(id, login));
+    }
+
+    private Note getOwnedNote(Long id, String login) {
         return noteRepository.findByIdAndUserProfileLogin(id, login)
                 .orElseThrow(() -> new NoteNotFoundException(
                         AppConstants.Note.NOT_FOUND_MESSAGE_PREFIX + id));

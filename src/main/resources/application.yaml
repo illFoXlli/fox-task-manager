@@ -10,6 +10,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
     show-sql: true
 
   flyway:
@@ -32,3 +36,10 @@ app:
     password: ${ADMIN_PASSWORD}
     display-name: ${ADMIN_DISPLAY_NAME:Admin}
     email: ${ADMIN_EMAIL:}
+
+  telegram:
+    bot-username: ${APP_TELEGRAM_BOT_USERNAME}
+    bot-token: ${APP_TELEGRAM_BOT_TOKEN}
+    return-base-url: ${APP_TELEGRAM_RETURN_BASE_URL:}
+    webhook-secret: ${APP_TELEGRAM_WEBHOOK_SECRET:}
+    auth-max-age-seconds: ${APP_TELEGRAM_AUTH_MAX_AGE_SECONDS:86400}

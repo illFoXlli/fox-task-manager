@@ -6,33 +6,11 @@
     <title>Створити нотатку | Fox Task Manager</title>
 
     <link rel="icon" type="image/png" href="/images/auth/favicon.png">
-    <link rel="stylesheet" href="/styles.css?v=1">
+    <link rel="stylesheet" th:href="@{/styles.css(v=${assetVersion})}">
 </head>
 
 <body class="app-page">
-<header class="app-header">
-    <a class="app-brand" th:href="@{/note/view}" aria-label="Fox Task Manager">
-        <span class="app-brand__mark" aria-hidden="true"></span>
-    </a>
-
-    <nav class="app-nav" aria-label="Основна навігація">
-        <a class="app-nav__link" th:href="@{/note/view}">
-            Нотатки
-        </a>
-
-        <a class="app-nav__link" th:href="@{/note/list}">
-            Керування
-        </a>
-
-        <a class="app-nav__link app-nav__link--active" th:href="@{/note/create}">
-            Створити
-        </a>
-    </nav>
-
-    <a href="/login" class="app-header__action" data-logout-button>
-        Вийти
-    </a>
-</header>
+<header th:replace="~{fragments/app-header :: header('create')}"></header>
 
 <main class="notes-shell">
     <section class="notes-hero">
@@ -51,7 +29,7 @@
         </div>
 
         <a class="notes-hero__button" th:href="@{/note/list}">
-            Назад до списку
+            Редагувати
         </a>
     </section>
 
@@ -99,6 +77,6 @@
     </section>
 </main>
 
-<script type="module" th:src="@{/app.js?v=1}"></script>
+<script type="module" th:src="@{/app.js(v=${assetVersion})}"></script>
 </body>
 </html>

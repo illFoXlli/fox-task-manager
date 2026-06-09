@@ -39,6 +39,15 @@ public class CookieServiceImpl implements CookieService {
     }
 
     @Override
+    public void addDeviceIdCookie(HttpServletResponse response, String deviceId) {
+        addCookie(
+                response,
+                DEVICE_ID_COOKIE,
+                deviceId,
+                Duration.ofDays(AppConstants.Cookie.DEVICE_ID_MAX_AGE_DAYS));
+    }
+
+    @Override
     public void clearAuthCookies(HttpServletResponse response) {
         addCookie(response, ACCESS_TOKEN_COOKIE, "", Duration.ZERO);
         addCookie(response, REFRESH_TOKEN_COOKIE, "", Duration.ZERO);

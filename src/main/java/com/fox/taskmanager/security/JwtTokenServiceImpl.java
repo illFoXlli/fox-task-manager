@@ -61,6 +61,16 @@ public class JwtTokenServiceImpl implements JwtTokenService {
         }
     }
 
+    @Override
+    public boolean isAccessTokenValid(String token) {
+        return isTokenTypeValid(token, ACCESS_TOKEN_TYPE);
+    }
+
+    @Override
+    public boolean isRefreshTokenValid(String token) {
+        return isTokenTypeValid(token, REFRESH_TOKEN_TYPE);
+    }
+
     private String createToken(
             UserProfile userProfile,
             String tokenType,
@@ -83,5 +93,13 @@ public class JwtTokenServiceImpl implements JwtTokenService {
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
+    }
+
+    private boolean isTokenTypeValid(String token, String expectedType) {
+        try {
+            return expectedType.equals(extractClaims(token).get(TOKEN_TYPE, String.class));
+        } catch (JwtException | IllegalArgumentException exception) {
+            return false;
+        }
     }
 }

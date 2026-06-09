@@ -18,11 +18,33 @@ public final class AppConstants {
         public static final String USER_EXISTS_MESSAGE = "Користувач з таким логіном вже існує";
         public static final String ACCOUNT_DISABLED_MESSAGE = "Обліковий запис вимкнено";
         public static final String ACCOUNT_LOCKED_MESSAGE = "Обліковий запис заблоковано";
+        public static final String TELEGRAM_AUTH_FAILED_MESSAGE = "Не вдалося підтвердити Telegram";
         public static final String LOGIN_SUCCESS_MESSAGE = "Вхід виконано успішно";
         public static final String REGISTER_SUCCESS_MESSAGE = "Реєстрацію виконано успішно";
+        public static final String REGISTER_FAILED_MESSAGE = "Перевір дані реєстрації";
         public static final String LOGOUT_SUCCESS_MESSAGE = "Вихід виконано успішно";
 
         private Auth() {
+        }
+    }
+
+    public static final class Asset {
+
+        public static final String VERSION = "7";
+
+        private Asset() {
+        }
+    }
+
+    public static final class Telegram {
+
+        public static final int AUTH_SESSION_EXPIRATION_MINUTES = 10;
+        public static final int AUTH_SESSION_RETENTION_DAYS = 7;
+        public static final String START_PAYLOAD_PREFIX = "auth_";
+        public static final String CONFIRM_CALLBACK_PREFIX = "confirm:";
+        public static final String TELEGRAM_LINK_BASE_URL = "https://t.me/";
+
+        private Telegram() {
         }
     }
 
@@ -30,6 +52,8 @@ public final class AppConstants {
 
         public static final String ACCESS_TOKEN_NAME = "access_token";
         public static final String REFRESH_TOKEN_NAME = "refresh_token";
+        public static final String DEVICE_ID_NAME = "device_id";
+        public static final int DEVICE_ID_MAX_AGE_DAYS = 365;
         public static final String PATH = "/";
         public static final String SAME_SITE = "Lax";
 
@@ -60,6 +84,7 @@ public final class AppConstants {
 
         public static final String ROOT = "/";
         public static final String LOGIN = "/login";
+        public static final String LOGOUT = "/logout";
         public static final String REGISTER = "/register";
         public static final String NOTE_LIST = "/note/list";
         public static final String NOTE_VIEW = "/note/view";
@@ -67,4 +92,5 @@ public final class AppConstants {
         private Route() {
         }
     }
+
 }

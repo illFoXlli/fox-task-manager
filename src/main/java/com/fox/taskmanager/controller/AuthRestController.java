@@ -42,8 +42,10 @@ public class AuthRestController {
     }
 
     @PostMapping("/api/auth/logout")
-    public ResponseEntity<AuthResponse> logout(HttpServletResponse response) {
-        authService.logout(response);
+    public ResponseEntity<AuthResponse> logout(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+        authService.logout(request, response);
 
         return ResponseEntity.ok(
                 new AuthResponse(

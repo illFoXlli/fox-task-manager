@@ -1,10 +1,11 @@
 package com.fox.taskmanager.controller;
 
+import com.fox.taskmanager.config.WebRedirect;
 import com.fox.taskmanager.dto.note.NoteCreateRequest;
+import com.fox.taskmanager.dto.note.NoteResponse;
 import com.fox.taskmanager.dto.note.NoteUpdateRequest;
-import com.fox.taskmanager.model.Note;
 import com.fox.taskmanager.service.NoteService;
-import com.fox.taskmanager.support.AppTime;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import org.springframework.stereotype.Controller;
@@ -46,21 +47,21 @@ public class NoteController {
     }
 
     @PostMapping("/note/delete")
-    public String deleteNote(@RequestParam Long id, Principal principal) {
+    public void deleteNote(
+            @RequestParam Long id,
+            Principal principal,
+            HttpServletResponse response) {
         noteService.deleteById(id, principal.getName());
 
-        return "redirect:/note/list";
+        WebRedirect.sendRelativeRedirect(response, "/note/list");
     }
 
     @GetMapping("/note/edit")
     public String editNote(@RequestParam Long id, Model model, Principal principal) {
-        Note note = noteService.getById(id, principal.getName());
+        NoteResponse note = noteService.getById(id, principal.getName());
 
         model.addAttribute("note", NoteUpdateRequest.from(note));
-        model.addAttribute("createdAt", note.getCreatedAt());
-        model.addAttribute("createdAtUtc", AppTime.toUtcString(note.getCreatedAt()));
-        model.addAttribute("updatedAt", note.getUpdatedAt());
-        model.addAttribute("updatedAtUtc", AppTime.toUtcString(note.getUpdatedAt()));
+        addAuditAttributes(model, note);
 
         return "note-edit";
     }
@@ -70,21 +71,20 @@ public class NoteController {
             @Valid @ModelAttribute("note") NoteUpdateRequest request,
             BindingResult bindingResult,
             Model model,
-            Principal principal) {
+            Principal principal,
+            HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
-            Note note = noteService.getById(request.getId(), principal.getName());
+            NoteResponse note = noteService.getById(request.getId(), principal.getName());
 
-            model.addAttribute("createdAt", note.getCreatedAt());
-            model.addAttribute("createdAtUtc", AppTime.toUtcString(note.getCreatedAt()));
-            model.addAttribute("updatedAt", note.getUpdatedAt());
-            model.addAttribute("updatedAtUtc", AppTime.toUtcString(note.getUpdatedAt()));
+            addAuditAttributes(model, note);
 
             return "note-edit";
         }
 
         noteService.update(request, principal.getName());
 
-        return "redirect:/note/list";
+        WebRedirect.sendRelativeRedirect(response, "/note/list");
+        return null;
     }
 
     @GetMapping("/note/create")
@@ -98,13 +98,22 @@ public class NoteController {
     public String createNote(
             @Valid @ModelAttribute("note") NoteCreateRequest request,
             BindingResult bindingResult,
-            Principal principal) {
+            Principal principal,
+            HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             return "note-create";
         }
 
         noteService.add(request, principal.getName());
 
-        return "redirect:/note/list";
+        WebRedirect.sendRelativeRedirect(response, "/note/list");
+        return null;
+    }
+
+    private void addAuditAttributes(Model model, NoteResponse note) {
+        model.addAttribute("createdAt", note.getCreatedAt());
+        model.addAttribute("createdAtUtc", note.getCreatedAtUtc());
+        model.addAttribute("updatedAt", note.getUpdatedAt());
+        model.addAttribute("updatedAtUtc", note.getUpdatedAtUtc());
     }
 }

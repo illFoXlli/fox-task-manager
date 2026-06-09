@@ -41,6 +41,9 @@ public class RefreshToken {
     @Column(name = "ip_address", length = 100)
     private String ipAddress;
 
+    @Column(name = "device_id", nullable = false, length = 64)
+    private String deviceId;
+
     @Column(name = "issued_at", nullable = false)
     private LocalDateTime issuedAt;
 
@@ -49,6 +52,9 @@ public class RefreshToken {
 
     @Column(name = "revoked_at")
     private LocalDateTime revokedAt;
+
+    @Column(name = "last_used_at")
+    private LocalDateTime lastUsedAt;
 
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -132,6 +138,14 @@ public class RefreshToken {
         this.ipAddress = ipAddress;
     }
 
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
     public LocalDateTime getIssuedAt() {
         return issuedAt;
     }
@@ -154,6 +168,14 @@ public class RefreshToken {
 
     public void setRevokedAt(LocalDateTime revokedAt) {
         this.revokedAt = revokedAt;
+    }
+
+    public LocalDateTime getLastUsedAt() {
+        return lastUsedAt;
+    }
+
+    public void setLastUsedAt(LocalDateTime lastUsedAt) {
+        this.lastUsedAt = lastUsedAt;
     }
 
     public LocalDateTime getCreatedAt() {

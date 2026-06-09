@@ -1,7 +1,6 @@
 package com.fox.taskmanager.dto.note;
 
 import com.fox.taskmanager.config.AppConstants;
-import com.fox.taskmanager.model.Note;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -19,7 +18,7 @@ public class NoteUpdateRequest {
     @Size(max = AppConstants.Note.CONTENT_MAX_LENGTH)
     private String content;
 
-    public static NoteUpdateRequest from(Note note) {
+    public static NoteUpdateRequest from(NoteResponse note) {
         NoteUpdateRequest request = new NoteUpdateRequest();
 
         request.setId(note.getId());

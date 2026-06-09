@@ -32,17 +32,24 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public RefreshToken saveRefreshToken(
             String refreshToken,
             UserProfile userProfile,
+            AuthProvider source,
+            String deviceId,
             String userAgent,
             String ipAddress) {
-        RefreshToken token = new RefreshToken();
+        LocalDateTime now = AppTime.nowUtc();
+        RefreshToken token = findOrCreateCurrentDeviceToken(
+                userProfile,
+                source,
+                deviceId,
+                userAgent);
 
         token.setTokenHash(tokenHashService.hash(refreshToken));
         token.setUserProfile(userProfile);
-        token.setSource(AuthProvider.WEB);
+        token.setSource(source);
+        token.setDeviceId(deviceId);
         token.setUserAgent(userAgent);
         token.setIpAddress(ipAddress);
-        LocalDateTime now = AppTime.nowUtc();
-
+        token.setRevokedAt(null);
         token.setIssuedAt(now);
         token.setExpiresAt(now.plusDays(jwtProperties.getRefreshExpirationDays()));
 
@@ -50,7 +57,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public RefreshToken getValidRefreshToken(String refreshToken) {
         String tokenHash = tokenHashService.hash(refreshToken);
 
@@ -65,7 +72,9 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
             throw new IllegalArgumentException("Refresh token is expired");
         }
 
-        return token;
+        token.setLastUsedAt(AppTime.nowUtc());
+
+        return refreshTokenRepository.save(token);
     }
 
     @Override
@@ -88,5 +97,33 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                     token.setRevokedAt(AppTime.nowUtc());
                     refreshTokenRepository.save(token);
                 });
+    }
+
+    private RefreshToken findOrCreateCurrentDeviceToken(
+            UserProfile userProfile,
+            AuthProvider source,
+            String deviceId,
+            String userAgent) {
+        var tokens = refreshTokenRepository.findCurrentDeviceTokens(
+                userProfile,
+                source,
+                deviceId);
+
+        if (tokens.isEmpty()) {
+            tokens = refreshTokenRepository.findLegacyCurrentDeviceTokens(
+                    userProfile,
+                    source,
+                    userAgent);
+        }
+
+        if (tokens.isEmpty()) {
+            return new RefreshToken();
+        }
+
+        tokens.stream()
+                .skip(1)
+                .forEach(refreshTokenRepository::delete);
+
+        return tokens.getFirst();
     }
 }

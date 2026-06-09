@@ -5,12 +5,16 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', async (event) => {
             event.preventDefault();
 
-            await fetch('/api/auth/logout', {
-                method: 'POST',
-                credentials: 'include'
-            });
+            try {
+                await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
 
-            window.location.assign('/login');
+                window.location.assign('/login');
+            } catch (error) {
+                window.location.assign(button.getAttribute('href') || '/logout');
+            }
         });
     });
 });

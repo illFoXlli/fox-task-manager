@@ -6,7 +6,7 @@
     <title>Реєстрація | Fox Task Manager</title>
 
     <link rel="icon" type="image/png" href="/images/auth/favicon.png">
-    <link rel="stylesheet" href="/styles.css?v=1">
+    <link rel="stylesheet" th:href="@{/styles.css(v=${assetVersion})}">
 </head>
 
 <body class="auth-page auth-page--register">
@@ -43,11 +43,23 @@
                 </p>
             </div>
 
-            <div id="registerAlert" class="auth-alert auth-alert--hidden" role="alert">
+            <div
+                    id="registerAlert"
+                    class="auth-alert"
+                    th:classappend="${registerError == null} ? ' auth-alert--hidden'"
+                    role="alert"
+                    th:text="${registerError ?: 'Користувач з таким логіном вже існує'}"
+            >
                 Користувач з таким логіном вже існує
             </div>
 
-            <form id="registerForm" class="auth-form" novalidate>
+            <form
+                    id="registerForm"
+                    class="auth-form"
+                    th:action="@{/register}"
+                    method="post"
+                    novalidate
+            >
                 <div class="form-group">
                     <label class="form-label" for="login">
                         Логін
@@ -142,14 +154,12 @@
                 <span>або</span>
             </div>
 
-            <button id="telegramRegisterButton" class="button button--telegram button--full" type="button">
+            <a class="button button--telegram button--full"
+               data-telegram-start-link
+               th:href="@{/auth/telegram/start(mode='register')}">
                 <span class="button__telegram-icon" aria-hidden="true"></span>
                 Зареєструватися через Telegram
-            </button>
-
-            <p id="telegramMessage" class="auth-note auth-note--hidden">
-                Реєстрація через Telegram скоро буде доступна.
-            </p>
+            </a>
         </div>
     </section>
 </main>
@@ -159,6 +169,6 @@
     <span>© 2026</span>
 </footer>
 
-<script src="/app.js?v=1" type="module" defer></script>
+<script th:src="@{/app.js(v=${assetVersion})}" type="module" defer></script>
 </body>
 </html>

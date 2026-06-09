@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="uk" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header th:fragment="header(active)" class="app-header">
+    <a class="app-brand" href="https://home.fox.kh.ua" data-home-link aria-label="Fox Task Manager">
+        <span class="app-brand__mark" aria-hidden="true"></span>
+    </a>
+
+    <nav class="app-nav" aria-label="Основна навігація">
+        <a class="app-nav__link"
+           th:classappend="${active == 'view'} ? ' app-nav__link--active'"
+           th:href="@{/note/view}">
+            Нотатки
+        </a>
+
+        <a class="app-nav__link"
+           th:classappend="${active == 'manage'} ? ' app-nav__link--active'"
+           th:href="@{/note/list}">
+            Керування
+        </a>
+
+        <a class="app-nav__link"
+           th:classappend="${active == 'create'} ? ' app-nav__link--active'"
+           th:href="@{/note/create}">
+            Створити
+        </a>
+    </nav>
+
+    <div class="app-header__tools">
+        <div class="app-clock" data-app-clock aria-label="Поточний час">
+            00.00.0000 00:00:00
+        </div>
+
+        <a href="/logout" class="app-header__action" data-logout-button>
+            Вийти
+        </a>
+    </div>
+</header>
+</body>
+</html>

@@ -9,12 +9,15 @@ import com.fox.taskmanager.model.AuthProvider;
 import com.fox.taskmanager.model.UserProfile;
 import com.fox.taskmanager.model.UserRole;
 import com.fox.taskmanager.repository.UserProfileRepository;
+import com.fox.taskmanager.security.ClientIpResolver;
 import com.fox.taskmanager.security.CookieService;
 import com.fox.taskmanager.security.JwtTokenService;
 import com.fox.taskmanager.support.AppTime;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
+import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class AuthServiceImpl implements AuthService {
 
+    private final ClientIpResolver clientIpResolver;
     private final CookieService cookieService;
     private final JwtTokenService jwtTokenService;
     private final PasswordEncoder passwordEncoder;
@@ -29,11 +33,13 @@ public class AuthServiceImpl implements AuthService {
     private final UserProfileRepository userProfileRepository;
 
     public AuthServiceImpl(
+            ClientIpResolver clientIpResolver,
             CookieService cookieService,
             JwtTokenService jwtTokenService,
             PasswordEncoder passwordEncoder,
             RefreshTokenService refreshTokenService,
             UserProfileRepository userProfileRepository) {
+        this.clientIpResolver = clientIpResolver;
         this.cookieService = cookieService;
         this.jwtTokenService = jwtTokenService;
         this.passwordEncoder = passwordEncoder;
@@ -52,18 +58,21 @@ public class AuthServiceImpl implements AuthService {
         UserProfile userProfile = userProfileRepository.findByLogin(login)
                 .orElseThrow(() -> new AuthException(AppConstants.Auth.LOGIN_FAILED_MESSAGE));
 
-        if (!passwordEncoder.matches(request.getPassword(), userProfile.getPasswordHash())) {
+        if (userProfile.getPasswordHash() == null
+                || !passwordEncoder.matches(request.getPassword(), userProfile.getPasswordHash())) {
             throw new AuthException(AppConstants.Auth.LOGIN_FAILED_MESSAGE);
         }
 
         validateUserAccess(userProfile);
-        updateLoginAudit(userProfile);
 
-        issueTokens(userProfile, httpRequest, httpResponse);
+        LoginClient loginClient = resolveLoginClient(httpRequest);
+
+        updateLoginAudit(userProfile, AuthProvider.WEB, loginClient);
+        issueTokens(userProfile, AuthProvider.WEB, loginClient, httpResponse);
 
         return new AuthResponse(
                 AppConstants.Auth.LOGIN_SUCCESS_MESSAGE,
-                AppConstants.Route.NOTE_LIST);
+                AppConstants.Route.NOTE_VIEW);
     }
 
     @Override
@@ -96,8 +105,10 @@ public class AuthServiceImpl implements AuthService {
 
         UserProfile savedUserProfile = userProfileRepository.save(userProfile);
 
-        updateLoginAudit(savedUserProfile);
-        issueTokens(savedUserProfile, httpRequest, httpResponse);
+        LoginClient loginClient = resolveLoginClient(httpRequest);
+
+        updateLoginAudit(savedUserProfile, AuthProvider.WEB, loginClient);
+        issueTokens(savedUserProfile, AuthProvider.WEB, loginClient, httpResponse);
 
         return new AuthResponse(
                 AppConstants.Auth.REGISTER_SUCCESS_MESSAGE,
@@ -105,13 +116,20 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void logout(HttpServletResponse response) {
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = extractCookie(request, CookieService.REFRESH_TOKEN_COOKIE);
+
+        if (refreshToken != null) {
+            refreshTokenService.revokeRefreshToken(refreshToken);
+        }
+
         cookieService.clearAuthCookies(response);
     }
 
     private void issueTokens(
             UserProfile userProfile,
-            HttpServletRequest httpRequest,
+            AuthProvider source,
+            LoginClient loginClient,
             HttpServletResponse httpResponse) {
         String accessToken = jwtTokenService.createAccessToken(userProfile);
         String refreshToken = jwtTokenService.createRefreshToken(userProfile);
@@ -119,9 +137,12 @@ public class AuthServiceImpl implements AuthService {
         refreshTokenService.saveRefreshToken(
                 refreshToken,
                 userProfile,
-                httpRequest.getHeader("User-Agent"),
-                httpRequest.getRemoteAddr());
+                source,
+                loginClient.deviceId(),
+                loginClient.userAgent(),
+                loginClient.ipAddress());
 
+        cookieService.addDeviceIdCookie(httpResponse, loginClient.deviceId());
         cookieService.addAccessTokenCookie(httpResponse, accessToken);
         cookieService.addRefreshTokenCookie(httpResponse, refreshToken);
     }
@@ -136,7 +157,10 @@ public class AuthServiceImpl implements AuthService {
         }
     }
 
-    private void updateLoginAudit(UserProfile userProfile) {
+    private void updateLoginAudit(
+            UserProfile userProfile,
+            AuthProvider source,
+            LoginClient loginClient) {
         LocalDateTime now = AppTime.nowUtc();
 
         if (userProfile.getFirstLoginAt() == null) {
@@ -144,11 +168,32 @@ public class AuthServiceImpl implements AuthService {
         }
 
         userProfile.setLastLoginAt(now);
-        userProfile.setWebLastLoginAt(now);
+
+        if (source == AuthProvider.TELEGRAM) {
+            userProfile.setTelegramLastLoginAt(now);
+        } else {
+            userProfile.setWebLastLoginAt(now);
+        }
+
         userProfile.setLastSeenAt(now);
+        userProfile.setLastDeviceId(loginClient.deviceId());
+        userProfile.setLastIpAddress(loginClient.ipAddress());
         userProfile.setOnline(true);
 
         userProfileRepository.save(userProfile);
+    }
+
+    private LoginClient resolveLoginClient(HttpServletRequest request) {
+        String deviceId = extractCookie(request, CookieService.DEVICE_ID_COOKIE);
+
+        if (deviceId == null || deviceId.isBlank()) {
+            deviceId = UUID.randomUUID().toString();
+        }
+
+        return new LoginClient(
+                deviceId,
+                request.getHeader("User-Agent"),
+                clientIpResolver.resolve(request));
     }
 
     private String normalizeLogin(String login) {
@@ -165,5 +210,25 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return value.trim();
+    }
+
+    private String extractCookie(HttpServletRequest request, String name) {
+        if (request.getCookies() == null) {
+            return null;
+        }
+
+        for (Cookie cookie : request.getCookies()) {
+            if (name.equals(cookie.getName())) {
+                return cookie.getValue();
+            }
+        }
+
+        return null;
+    }
+
+    private record LoginClient(
+            String deviceId,
+            String userAgent,
+            String ipAddress) {
     }
 }

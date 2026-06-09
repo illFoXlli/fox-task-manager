@@ -9,9 +9,13 @@ public interface CookieService {
 
     String REFRESH_TOKEN_COOKIE = AppConstants.Cookie.REFRESH_TOKEN_NAME;
 
+    String DEVICE_ID_COOKIE = AppConstants.Cookie.DEVICE_ID_NAME;
+
     void addAccessTokenCookie(HttpServletResponse response, String token);
 
     void addRefreshTokenCookie(HttpServletResponse response, String token);
+
+    void addDeviceIdCookie(HttpServletResponse response, String deviceId);
 
     void clearAuthCookies(HttpServletResponse response);
 }

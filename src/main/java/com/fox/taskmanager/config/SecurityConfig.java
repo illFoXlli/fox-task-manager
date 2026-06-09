@@ -30,6 +30,8 @@ public class SecurityConfig {
                                 AppConstants.Route.REGISTER,
                                 "/test",
                                 "/api/auth/**",
+                                "/api/telegram/webhook/**",
+                                "/auth/telegram/start",
                                 "/styles.css",
                                 "/app.js",
                                 "/css/**",
@@ -45,9 +47,10 @@ public class SecurityConfig {
                                 return;
                             }
 
-                            response.sendRedirect(AppConstants.Route.LOGIN);
+                            WebRedirect.sendRelativeRedirect(response, AppConstants.Route.LOGIN);
                         }))
                 .formLogin(form -> form.disable())
+                .logout(logout -> logout.disable())
                 .httpBasic(basic -> basic.disable())
                 .addFilterBefore(jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class)
