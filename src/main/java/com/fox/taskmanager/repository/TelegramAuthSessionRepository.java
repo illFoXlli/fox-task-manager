@@ -1,5 +1,6 @@
 package com.fox.taskmanager.repository;
 
+import com.fox.taskmanager.model.TelegramAuthMode;
 import com.fox.taskmanager.model.TelegramAuthSession;
 import com.fox.taskmanager.model.TelegramAuthStatus;
 import java.time.LocalDateTime;
@@ -23,6 +24,22 @@ public interface TelegramAuthSessionRepository extends JpaRepository<TelegramAut
             """)
     int expireStaleSessions(
             @Param("now") LocalDateTime now,
+            @Param("expiredStatus") TelegramAuthStatus expiredStatus,
+            @Param("activeStatuses") Collection<TelegramAuthStatus> activeStatuses);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query("""
+            update TelegramAuthSession session
+            set session.status = :expiredStatus
+            where session.id <> :currentSessionId
+              and session.telegramId = :telegramId
+              and session.mode = :mode
+              and session.status in :activeStatuses
+            """)
+    int expireActiveSessionsForTelegramUser(
+            @Param("currentSessionId") Long currentSessionId,
+            @Param("telegramId") Long telegramId,
+            @Param("mode") TelegramAuthMode mode,
             @Param("expiredStatus") TelegramAuthStatus expiredStatus,
             @Param("activeStatuses") Collection<TelegramAuthStatus> activeStatuses);
 

@@ -39,7 +39,7 @@ public final class AppConstants {
     public static final class Telegram {
 
         public static final int AUTH_SESSION_EXPIRATION_MINUTES = 10;
-        public static final int AUTH_SESSION_RETENTION_DAYS = 7;
+        public static final int AUTH_SESSION_RETENTION_DAYS = 1;
         public static final String START_PAYLOAD_PREFIX = "auth_";
         public static final String CONFIRM_CALLBACK_PREFIX = "confirm:";
         public static final String TELEGRAM_LINK_BASE_URL = "https://t.me/";

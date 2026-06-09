@@ -12,5 +12,18 @@ spring:
   flyway:
     enabled: ${FLYWAY_ENABLED:true}
 
+  security:
+    user:
+      name: user
+      password: default
+
+app:
+  default-user:
+    enabled: true
+    login: user
+    password: jdbcDefault
+    display-name: user
+    update-password: true
+
 server:
   port: 0

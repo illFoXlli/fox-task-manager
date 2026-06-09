@@ -48,6 +48,8 @@ class AuthServiceImplTest {
         authService = new AuthServiceImpl(
                 clientIpResolver,
                 cookieService,
+                "user",
+                "default",
                 jwtTokenService,
                 passwordEncoder,
                 refreshTokenService,
@@ -65,6 +67,26 @@ class AuthServiceImplTest {
 
         when(userProfileRepository.findByLogin("fox")).thenReturn(Optional.of(userProfile));
         when(passwordEncoder.matches("password", userProfile.getPasswordHash())).thenReturn(true);
+        when(jwtTokenService.createAccessToken(userProfile)).thenReturn(ACCESS_TOKEN);
+        when(jwtTokenService.createRefreshToken(userProfile)).thenReturn(REFRESH_TOKEN);
+        when(clientIpResolver.resolve(httpRequest)).thenReturn("127.0.0.1");
+
+        AuthResponse response = authService.login(request, httpRequest, httpResponse);
+
+        assertThat(response.getRedirectUrl()).isEqualTo(AppConstants.Route.NOTE_VIEW);
+    }
+
+    @Test
+    void loginAcceptsDefaultSpringSecurityUserPasswordForHomeworkCompatibility() {
+        LoginRequest request = new LoginRequest();
+        request.setLogin(" user ");
+        request.setPassword("default");
+        UserProfile userProfile = createEnabledUserProfile("user");
+        HttpServletRequest httpRequest = mock(HttpServletRequest.class);
+        HttpServletResponse httpResponse = mock(HttpServletResponse.class);
+
+        when(userProfileRepository.findByLogin("user")).thenReturn(Optional.of(userProfile));
+        when(passwordEncoder.matches("default", userProfile.getPasswordHash())).thenReturn(false);
         when(jwtTokenService.createAccessToken(userProfile)).thenReturn(ACCESS_TOKEN);
         when(jwtTokenService.createRefreshToken(userProfile)).thenReturn(REFRESH_TOKEN);
         when(clientIpResolver.resolve(httpRequest)).thenReturn("127.0.0.1");

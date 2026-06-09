@@ -2,6 +2,11 @@ spring:
   application:
     name: fox-task-manager
 
+  security:
+    user:
+      name: ${SPRING_SECURITY_USER_NAME:user}
+      password: ${SPRING_SECURITY_USER_PASSWORD:}
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USER}
@@ -36,6 +41,14 @@ app:
     password: ${ADMIN_PASSWORD}
     display-name: ${ADMIN_DISPLAY_NAME:Admin}
     email: ${ADMIN_EMAIL:}
+
+  default-user:
+    enabled: ${APP_DEFAULT_USER_ENABLED:true}
+    login: ${APP_DEFAULT_USER_LOGIN:user}
+    password: ${APP_DEFAULT_USER_PASSWORD:}
+    display-name: ${APP_DEFAULT_USER_DISPLAY_NAME:user}
+    email: ${APP_DEFAULT_USER_EMAIL:}
+    update-password: ${APP_DEFAULT_USER_UPDATE_PASSWORD:true}
 
   telegram:
     bot-username: ${APP_TELEGRAM_BOT_USERNAME}

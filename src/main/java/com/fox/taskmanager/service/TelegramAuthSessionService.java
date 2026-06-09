@@ -26,6 +26,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +35,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class TelegramAuthSessionService {
 
     private static final int TOKEN_BYTE_LENGTH = 24;
+    private static final List<TelegramAuthStatus> ACTIVE_STATUSES = List.of(
+            TelegramAuthStatus.PENDING,
+            TelegramAuthStatus.AWAITING_CONFIRMATION,
+            TelegramAuthStatus.CONFIRMED);
 
     private final ClientIpResolver clientIpResolver;
     private final CookieService cookieService;
@@ -93,6 +98,7 @@ public class TelegramAuthSessionService {
         TelegramAuthSession session = findSession(token);
         validatePendingSession(session);
         updateSessionTelegramUser(session, user);
+        expireOtherActiveSessions(session);
         session.setStatus(TelegramAuthStatus.AWAITING_CONFIRMATION);
 
         telegramAuthSessionRepository.save(session);
@@ -248,6 +254,19 @@ public class TelegramAuthSessionService {
         session.setTelegramUsername(emptyToNull(user.getUsername()));
         session.setTelegramFirstName(emptyToNull(user.getFirstName()));
         session.setTelegramLastName(emptyToNull(user.getLastName()));
+    }
+
+    private void expireOtherActiveSessions(TelegramAuthSession session) {
+        if (session.getId() == null || session.getTelegramId() == null) {
+            return;
+        }
+
+        telegramAuthSessionRepository.expireActiveSessionsForTelegramUser(
+                session.getId(),
+                session.getTelegramId(),
+                session.getMode(),
+                TelegramAuthStatus.EXPIRED,
+                ACTIVE_STATUSES);
     }
 
     private UserProfile createTelegramUserProfile(TelegramBotUser user) {
