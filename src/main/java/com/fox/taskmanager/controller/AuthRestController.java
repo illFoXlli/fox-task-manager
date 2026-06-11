@@ -5,6 +5,9 @@ import com.fox.taskmanager.dto.auth.AuthResponse;
 import com.fox.taskmanager.dto.auth.LoginRequest;
 import com.fox.taskmanager.dto.auth.RegisterRequest;
 import com.fox.taskmanager.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Tag(name = "Authentication", description = "Login, registration and logout endpoints")
 public class AuthRestController {
 
     private final AuthService authService;
@@ -24,6 +28,9 @@ public class AuthRestController {
     }
 
     @PostMapping("/api/auth/login")
+    @Operation(summary = "Login")
+    @ApiResponse(responseCode = "200", description = "Login completed")
+    @ApiResponse(responseCode = "400", description = "Invalid credentials")
     public ResponseEntity<AuthResponse> login(
             @Valid @RequestBody LoginRequest request,
             HttpServletRequest httpRequest,
@@ -33,6 +40,9 @@ public class AuthRestController {
     }
 
     @PostMapping("/api/auth/register")
+    @Operation(summary = "Register")
+    @ApiResponse(responseCode = "200", description = "Registration completed")
+    @ApiResponse(responseCode = "400", description = "Invalid registration data")
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest request,
             HttpServletRequest httpRequest,
@@ -42,6 +52,8 @@ public class AuthRestController {
     }
 
     @PostMapping("/api/auth/logout")
+    @Operation(summary = "Logout")
+    @ApiResponse(responseCode = "200", description = "Logout completed")
     public ResponseEntity<AuthResponse> logout(
             HttpServletRequest request,
             HttpServletResponse response) {

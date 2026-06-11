@@ -32,12 +32,16 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/api/telegram/webhook/**",
                                 "/auth/telegram/start",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
                                 "/styles.css",
                                 "/app.js",
                                 "/css/**",
                                 "/js/**",
                                 "/images/**")
                         .permitAll()
+                        .requestMatchers("/api/notes/**").authenticated()
                         .requestMatchers("/note/**").authenticated()
                         .anyRequest().permitAll())
                 .exceptionHandling(exception -> exception
