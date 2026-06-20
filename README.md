@@ -60,7 +60,8 @@ Important variables:
 ```env
 APP_PORT=3000
 
-DB_URL=jdbc:postgresql://host.docker.internal:5432/task_manager?options=-c%20TimeZone=UTC
+POSTGRES_HOST=postgres
+DB_URL=jdbc:postgresql://postgres:5432/task_manager?options=-c%20TimeZone=UTC
 DB_USER=...
 DB_PASSWORD=...
 FLYWAY_ENABLED=true

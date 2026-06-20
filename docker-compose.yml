@@ -9,6 +9,8 @@ services:
     tmpfs:
       - /var/lib/postgresql/data
     entrypoint: ["bash", "/init-db.sh"]
+    networks:
+      - servers-net
 
   app:
     build:
@@ -22,3 +24,10 @@ services:
     depends_on:
       db-init:
         condition: service_completed_successfully
+    networks:
+      - servers-net
+
+networks:
+  servers-net:
+    external: true
+    name: servers-net
